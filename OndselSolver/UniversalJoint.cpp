@@ -25,7 +25,7 @@ void MbD::UniversalJoint::initializeGlobally()
 	if (constraints->empty())
 	{
 		createAtPointConstraints();
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 2));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 2));
 		this->root()->hasChanged = true;
 	}
 	else {

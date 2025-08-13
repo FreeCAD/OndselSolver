@@ -41,6 +41,11 @@ ConstraintType AtPointConstraintIqctJqc::type()
 	return essential;
 }
 
+std::string MbD::AtPointConstraintIqctJqc::constraintSpec()
+{
+	return AtPointConstraintIqcJqc::constraintSpec();
+}
+
 void AtPointConstraintIqctJqc::preVelIC()
 {
 	AtPointConstraintIqcJqc::preVelIC();

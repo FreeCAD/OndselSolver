@@ -30,7 +30,6 @@ namespace MbD {
         void prePosIC() override;
         void preVelIC() override;
         ConstraintType type() override;
-        
 
         size_t axis;
         std::shared_ptr<DispCompIecJecO> riIeJeO;

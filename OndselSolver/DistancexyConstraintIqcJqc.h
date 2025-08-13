@@ -34,10 +34,11 @@ namespace MbD {
 		void fillVelICJacob(SpMatDsptr mat) override;
 		void init_xyIeJeIe() override;
 		void useEquationNumbers() override;
+		std::string constraintSpec() override;
 
 		FRowDsptr pGpXJ, pGpEJ;
 		FMatDsptr ppGpXIpXJ, ppGpEIpXJ, ppGpXJpXJ, ppGpXIpEJ, ppGpEIpEJ, ppGpXJpEJ, ppGpEJpEJ;
-		size_t iqXJ, iqEJ;
+		size_t iqXJ = SIZE_MAX, iqEJ = SIZE_MAX;
 	};
 }
 

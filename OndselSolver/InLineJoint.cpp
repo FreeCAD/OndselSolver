@@ -13,12 +13,12 @@ MbD::InLineJoint::InLineJoint()
 {
 }
 
-MbD::InLineJoint::InLineJoint(const std::string&)
+MbD::InLineJoint::InLineJoint(const std::string& str) : Joint(str)
 {
 }
 
 void MbD::InLineJoint::createInLineConstraints()
 {
-	addConstraint(CREATE<TranslationConstraintIJ>::ConstraintWith(frmI, frmJ, 0));
-	addConstraint(CREATE<TranslationConstraintIJ>::ConstraintWith(frmI, frmJ, 1));
+	addConstraint(CREATE<TranslationConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 0));
+	addConstraint(CREATE<TranslationConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 1));
 }

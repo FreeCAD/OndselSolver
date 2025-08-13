@@ -116,3 +116,8 @@ void MbD::DistanceConstraintIqcJqc::useEquationNumbers()
 	iqXJ = frmJeqc->iqX();
 	iqEJ = frmJeqc->iqE();
 }
+
+std::string MbD::DistanceConstraintIqcJqc::constraintSpec()
+{
+	return "DistanceConstraintIJ";
+}

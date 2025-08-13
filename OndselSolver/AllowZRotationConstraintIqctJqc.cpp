@@ -52,3 +52,8 @@ void MbD::AllowZRotationConstraintIqctJqc::postPosIC()
 	//self becomeRedundantConstraint
 	assert(false);
 }
+
+std::string MbD::AllowZRotationConstraintIqctJqc::constraintSpec()
+{
+	return "AllowZRotationConstraintIJ";
+}

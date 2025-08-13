@@ -38,6 +38,7 @@ namespace MbD {
 		void fillAccICIterError(FColDsptr col) override;
 		void setqsuddotlam(FColDsptr col) override;
 		void discontinuityAtaddTypeTo(double t, std::shared_ptr<std::vector<DiscontinuityType>> disconTypes) override;
+		std::string constraintSpec() override;
 
 		std::shared_ptr<Constraint> constraint;
 	};

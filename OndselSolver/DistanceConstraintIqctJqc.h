@@ -17,6 +17,7 @@ namespace MbD {
     public:
         DistanceConstraintIqctJqc(EndFrmsptr frmi, EndFrmsptr frmj);
         ConstraintType type() override;
+        std::string constraintSpec() override;
 
         double pGpt, ppGptpt;
         FRowDsptr ppGpXIpt, ppGpEIpt, ppGpXJpt, ppGpEJpt;

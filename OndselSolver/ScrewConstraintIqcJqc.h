@@ -34,6 +34,7 @@ namespace MbD {
 		void fillVelICJacob(SpMatDsptr mat) override;
 		void init_zthez() override;
 		void useEquationNumbers() override;
+		std::string constraintSpec() override;
 
 		FRowDsptr pGpXJ, pGpEJ;
 		FMatDsptr ppGpEIpXJ, ppGpEIpEJ, ppGpEJpEJ;

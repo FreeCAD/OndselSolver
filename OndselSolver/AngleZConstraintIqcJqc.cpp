@@ -91,3 +91,8 @@ void MbD::AngleZConstraintIqcJqc::useEquationNumbers()
 	auto frmJeqc = std::static_pointer_cast<EndFrameqc>(frmJ);
 	iqEJ = frmJeqc->iqE();
 }
+
+std::string MbD::AngleZConstraintIqcJqc::constraintSpec()
+{
+	return "AngleZConstraintIJ";
+}

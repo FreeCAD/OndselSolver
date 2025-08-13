@@ -20,6 +20,7 @@ namespace MbD {
 
         void postInput() override;
         void postPosIC() override;
+        std::string constraintSpec() override;
 
     };
 }

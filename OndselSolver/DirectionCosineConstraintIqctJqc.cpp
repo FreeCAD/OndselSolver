@@ -27,6 +27,11 @@ ConstraintType DirectionCosineConstraintIqctJqc::type()
 	return essential;
 }
 
+std::string MbD::DirectionCosineConstraintIqctJqc::constraintSpec()
+{
+	return DirectionCosineConstraintIqcJqc::constraintSpec();
+}
+
 void DirectionCosineConstraintIqctJqc::preVelIC()
 {
 	DirectionCosineConstraintIJ::preVelIC();

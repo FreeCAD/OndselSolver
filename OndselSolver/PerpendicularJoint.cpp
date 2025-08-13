@@ -16,7 +16,7 @@ MbD::PerpendicularJoint::PerpendicularJoint()
 {
 }
 
-MbD::PerpendicularJoint::PerpendicularJoint(const std::string&)
+MbD::PerpendicularJoint::PerpendicularJoint(const std::string& str) : Joint(str)
 {
 }
 
@@ -24,7 +24,7 @@ void MbD::PerpendicularJoint::initializeGlobally()
 {
 	if (constraints->empty())
 	{
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 2));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 2));
 		this->root()->hasChanged = true;
 	}
 	else {

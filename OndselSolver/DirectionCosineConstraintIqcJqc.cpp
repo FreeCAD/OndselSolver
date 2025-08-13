@@ -38,6 +38,11 @@ void DirectionCosineConstraintIqcJqc::useEquationNumbers()
 	iqEJ = std::static_pointer_cast<EndFrameqc>(frmJ)->iqE();
 }
 
+std::string MbD::DirectionCosineConstraintIqcJqc::constraintSpec()
+{
+	return "DirectionCosineConstraintI" + MbDMath::xyzFromInt(axisI) + "J" + MbDMath::xyzFromInt(axisJ);
+}
+
 void DirectionCosineConstraintIqcJqc::fillPosICError(FColDsptr col)
 {
 	DirectionCosineConstraintIqcJc::fillPosICError(col);

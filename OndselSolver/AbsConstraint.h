@@ -27,6 +27,7 @@ namespace MbD {
 		void fillPosKineJacob(SpMatDsptr mat) override;
 		void fillVelICJacob(SpMatDsptr mat) override;
 		void useEquationNumbers() override;
+		std::string constraintSpec() override;
 
 		size_t axis = SIZE_MAX;
 		size_t iqXminusOnePlusAxis = SIZE_MAX;

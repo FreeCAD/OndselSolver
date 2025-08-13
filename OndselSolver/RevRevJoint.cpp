@@ -28,9 +28,9 @@ void MbD::RevRevJoint::initializeGlobally()
 		auto distxyIJ = DistancexyConstraintIJ::With(frmI, frmJ);
 		distxyIJ->setConstant(distanceIJ);
 		addConstraint(distxyIJ);
-		addConstraint(CREATE<TranslationConstraintIJ>::ConstraintWith(frmI, frmJ, 2));
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 0));
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 1));
+		addConstraint(CREATE<TranslationConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 0));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 1));
 		this->root()->hasChanged = true;
 	}
 	else {

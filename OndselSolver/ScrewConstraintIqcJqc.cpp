@@ -143,3 +143,8 @@ void MbD::ScrewConstraintIqcJqc::useEquationNumbers()
 	iqXJ = frmJeqc->iqX();
 	iqEJ = frmJeqc->iqE();
 }
+
+std::string MbD::ScrewConstraintIqcJqc::constraintSpec()
+{
+	return "ScrewConstraintIJ";
+}

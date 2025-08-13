@@ -130,3 +130,8 @@ void MbD::ConstVelConstraintIqcJqc::useEquationNumbers()
 	ConstVelConstraintIqcJc::useEquationNumbers();
 	iqEJ = std::static_pointer_cast<EndFrameqc>(frmJ)->iqE();
 }
+
+std::string MbD::ConstVelConstraintIqcJqc::constraintSpec()
+{
+	return "ConstVelConstraintIJ";
+}

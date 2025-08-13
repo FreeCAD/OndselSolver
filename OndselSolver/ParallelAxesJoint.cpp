@@ -16,7 +16,7 @@ MbD::ParallelAxesJoint::ParallelAxesJoint()
 {
 }
 
-MbD::ParallelAxesJoint::ParallelAxesJoint(const std::string&)
+MbD::ParallelAxesJoint::ParallelAxesJoint(const std::string& str) : Joint(str)
 {
 }
 
@@ -24,8 +24,8 @@ void MbD::ParallelAxesJoint::initializeGlobally()
 {
 	if (constraints->empty())
 	{
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 0));
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 1));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 0));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 1));
 		this->root()->hasChanged = true;
 	}
 	else {

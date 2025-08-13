@@ -27,6 +27,11 @@ ConstraintType TranslationConstraintIqctJqc::type()
 	return essential;
 }
 
+std::string MbD::TranslationConstraintIqctJqc::constraintSpec()
+{
+	return TranslationConstraintIqcJqc::constraintSpec();
+}
+
 void TranslationConstraintIqctJqc::preVelIC()
 {
 	TranslationConstraintIJ::preVelIC();

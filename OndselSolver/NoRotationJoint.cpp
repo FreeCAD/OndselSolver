@@ -17,7 +17,7 @@ MbD::NoRotationJoint::NoRotationJoint()
 {
 }
 
-MbD::NoRotationJoint::NoRotationJoint(const std::string&)
+MbD::NoRotationJoint::NoRotationJoint(const std::string& str) : Joint(str)
 {
 }
 
@@ -25,9 +25,9 @@ void MbD::NoRotationJoint::initializeGlobally()
 {
 	if (constraints->empty())
 	{
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 1, 0));
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 0));
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 1));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 1, 0));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 0));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 1));
 		this->root()->hasChanged = true;
 	}
 	else {

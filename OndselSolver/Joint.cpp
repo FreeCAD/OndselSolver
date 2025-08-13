@@ -97,7 +97,7 @@ void Joint::constraintsReport()
 		std::string str = "MbD: " + this->classname() + std::string(" ") + this->name + " has the following constraint(s) removed: ";
 		this->logString(str);
 		std::for_each(redunCons->begin(), redunCons->end(), [&](auto& con) {
-			str = "MbD: " + std::string("    ") + con->classname();
+			str = "MbD: " + std::string("    ") + con->constraintSpec();
 			this->logString(str);
 			});
 	}
