@@ -5,7 +5,7 @@
  *                                                                         *
  *   See LICENSE file for details about copyright.                         *
  ***************************************************************************/
- 
+
 #include "RedundantConstraint.h"
 
 using namespace MbD;
@@ -111,4 +111,9 @@ void RedundantConstraint::discontinuityAtaddTypeTo(double, std::shared_ptr<std::
 	//newSelf : = self constraint.
 	//newSelf discontinuityAt : tstartNew addTypeTo : collection.
 	//self become : newSelf
+}
+
+std::string MbD::RedundantConstraint::constraintSpec()
+{
+	return "RedundantConstraint" + constraint->constraintSpec();
 }

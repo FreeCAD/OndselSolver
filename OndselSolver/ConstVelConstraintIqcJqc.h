@@ -29,6 +29,7 @@ namespace MbD {
         void initA10IeJe() override;
         void initialize() override;
         void useEquationNumbers() override;
+        std::string constraintSpec() override;
 
         FRowDsptr pGpEJ;
         FMatDsptr ppGpEIpEJ;

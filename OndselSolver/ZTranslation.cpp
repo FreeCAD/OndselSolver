@@ -16,7 +16,7 @@ MbD::ZTranslation::ZTranslation()
 {
 }
 
-MbD::ZTranslation::ZTranslation(const std::string&)
+MbD::ZTranslation::ZTranslation(const std::string& str) : PrescribedMotion(str)
 {
 }
 
@@ -24,7 +24,7 @@ void MbD::ZTranslation::initializeGlobally()
 {
 	if (constraints->empty()) {
 		initMotions();
-		auto tranCon = CREATE<TranslationConstraintIJ>::ConstraintWith(frmI, frmJ, 2);
+		auto tranCon = CREATE<TranslationConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2);
 		addConstraint(tranCon);
 		this->root()->hasChanged = true;
 	}

@@ -70,8 +70,8 @@ namespace MbD {
 		}
 		static std::shared_ptr<Constraint> ConstraintWith(std::shared_ptr<EndFramec> frmi, std::shared_ptr<EndFramec> frmj, size_t axis) {
 			std::shared_ptr<Constraint> inst;
-			std::string str = typeid(T(frmi, frmj, axis)).name();
-			if (str.find("AtPointConstraintIJ") != std::string::npos) {
+			std::string str = typeid(T).name();
+			if (str.find("AtPointConstraintIqcJqc") != std::string::npos) {
 				if (std::dynamic_pointer_cast<EndFrameqct>(frmi)) {
 					inst = std::make_shared<AtPointConstraintIqctJqc>(frmi, frmj, axis);
 				}
@@ -79,7 +79,7 @@ namespace MbD {
 					inst = std::make_shared<AtPointConstraintIqcJqc>(frmi, frmj, axis);
 				}
 			}
-			else if(str.find("TranslationConstraintIJ") != std::string::npos) {
+			else if(str.find("TranslationConstraintIqcJqc") != std::string::npos) {
 				if (std::dynamic_pointer_cast<EndFrameqct>(frmi)) {
 					inst = std::make_shared<TranslationConstraintIqctJqc>(frmi, frmj, axis);
 				}
@@ -97,8 +97,8 @@ namespace MbD {
 		}
 		static std::shared_ptr<Constraint> ConstraintWith(std::shared_ptr<EndFramec> frmi, std::shared_ptr<EndFramec> frmj, size_t axisi, size_t axisj) {
 			std::shared_ptr<Constraint> inst;
-			std::string str = typeid(T(frmi, frmj, axisi, axisj)).name();
-			if (str.find("DirectionCosineConstraintIJ") != std::string::npos) {
+			std::string str = typeid(T).name();
+			if (str.find("DirectionCosineConstraintIqcJqc") != std::string::npos) {
 				if (std::dynamic_pointer_cast<EndFrameqct>(frmi)) {
 					inst = std::make_shared<DirectionCosineConstraintIqctJqc>(frmi, frmj, axisi, axisj);
 				}

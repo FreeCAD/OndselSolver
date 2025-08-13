@@ -13,13 +13,13 @@ MbD::InPlaneJoint::InPlaneJoint()
 {
 }
 
-MbD::InPlaneJoint::InPlaneJoint(const std::string&)
+MbD::InPlaneJoint::InPlaneJoint(const std::string& str) : Joint(str)
 {
 }
 
 void MbD::InPlaneJoint::createInPlaneConstraint()
 {
-	auto tranCon = CREATE<TranslationConstraintIJ>::ConstraintWith(frmI, frmJ, 2);
+	auto tranCon = CREATE<TranslationConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2);
 	tranCon->setConstant(offset);
 	addConstraint(tranCon);
 }

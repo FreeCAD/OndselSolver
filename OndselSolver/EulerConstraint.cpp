@@ -83,3 +83,8 @@ void EulerConstraint::fillAccICIterError(FColDsptr col)
 	sum += 2.0 * partFrame->qEdot->sumOfSquares();
 	col->atiplusNumber(iG, sum);
 }
+
+std::string MbD::EulerConstraint::constraintSpec()
+{
+	return "EulerConstraint";
+}

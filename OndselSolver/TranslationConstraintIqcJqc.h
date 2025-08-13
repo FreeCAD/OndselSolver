@@ -27,6 +27,7 @@ namespace MbD {
         void fillPosKineJacob(SpMatDsptr mat) override;
         void fillVelICJacob(SpMatDsptr mat) override;
         void useEquationNumbers() override;
+        std::string constraintSpec() override;
 
         FRowDsptr pGpXJ, pGpEJ;
         FMatDsptr ppGpEIpXJ, ppGpEIpEJ, ppGpEJpEJ;

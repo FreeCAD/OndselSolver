@@ -19,3 +19,8 @@ ConstraintType MbD::DistanceConstraintIqctJqc::type()
 {
 	return essential;
 }
+
+std::string MbD::DistanceConstraintIqctJqc::constraintSpec()
+{
+	return DistanceConstraintIqcJqc::constraintSpec();
+}

@@ -141,3 +141,8 @@ void MbD::RackPinConstraintIqcJqc::useEquationNumbers()
 	iqXJ = frmJeqc->iqX();
 	iqEJ = frmJeqc->iqE();
 }
+
+std::string MbD::RackPinConstraintIqcJqc::constraintSpec()
+{
+	return "RackPinConstraintIJ";
+}

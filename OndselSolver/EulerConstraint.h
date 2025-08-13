@@ -30,6 +30,7 @@ namespace MbD {
 		void fillPosKineJacob(SpMatDsptr mat) override;
 		void fillVelICJacob(SpMatDsptr mat) override;
 		void fillAccICIterError(FColDsptr col) override;
+		std::string constraintSpec() override;
 
 		FRowDsptr pGpE;		//partial derivative of G wrt pE
 		size_t iqE = SIZE_MAX;

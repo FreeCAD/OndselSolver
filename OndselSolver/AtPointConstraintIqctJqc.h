@@ -25,6 +25,7 @@ namespace MbD {
         void preAccIC() override;
         void preVelIC() override;
         ConstraintType type() override;
+        std::string constraintSpec() override;
 
         double pGpt;
         FRowDsptr ppGpEIpt;

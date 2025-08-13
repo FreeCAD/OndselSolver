@@ -32,6 +32,7 @@ namespace MbD {
         void preVelIC() override;
         void simUpdateAll() override;
         ConstraintType type() override;
+        std::string constraintSpec() override;
 
         std::shared_ptr<AngleZIecJec> thezIeJe;
     };

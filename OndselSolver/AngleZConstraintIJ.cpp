@@ -92,3 +92,8 @@ ConstraintType MbD::AngleZConstraintIJ::type()
 {
 	return essential;
 }
+
+std::string MbD::AngleZConstraintIJ::constraintSpec()
+{
+	return "AngleZConstraintIJ";
+}

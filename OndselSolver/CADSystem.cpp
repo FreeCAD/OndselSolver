@@ -5,7 +5,7 @@
  *                                                                         *
  *   See LICENSE file for details about copyright.                         *
  ***************************************************************************/
- 
+
 #include <string>
 #include <iostream>
 
@@ -595,6 +595,18 @@ void CADSystem::runOndselPiston()
 	TheSystem->addJoint(rotMotion1);
 	//
 	TheSystem->runKINEMATIC(TheSystem);
+	str = "";
+	TheSystem->jointsMotionsDo([&](std::shared_ptr<Joint> jm) {
+		str += jm->constraintSpecs();
+		});
+	str = "";
+	TheSystem->jointsMotionsDo([&](std::shared_ptr<Joint> jm) {
+		str += jm->name + " constraints\n";
+		jm->constraintsDo([&](std::shared_ptr<Constraint> con) {
+			str += "    " + con->constraintSpec() + "\n";
+			});
+		});
+	std::cout << str << std::endl;
 }
 
 void CADSystem::runPiston()

@@ -16,7 +16,7 @@ MbD::LineInPlaneJoint::LineInPlaneJoint()
 {
 }
 
-MbD::LineInPlaneJoint::LineInPlaneJoint(const std::string&)
+MbD::LineInPlaneJoint::LineInPlaneJoint(const std::string& str) : InPlaneJoint(str)
 {
 }
 
@@ -25,7 +25,7 @@ void MbD::LineInPlaneJoint::initializeGlobally()
 	if (constraints->empty())
 	{
 		this->createInPlaneConstraint();
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 2));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 2));
 		this->root()->hasChanged = true;
 	}
 	else {

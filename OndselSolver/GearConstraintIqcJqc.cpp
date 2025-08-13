@@ -162,3 +162,8 @@ void MbD::GearConstraintIqcJqc::useEquationNumbers()
 	iqXJ = frmJeqc->iqX();
 	iqEJ = frmJeqc->iqE();
 }
+
+std::string MbD::GearConstraintIqcJqc::constraintSpec()
+{
+	return "GearConstraintIJ";
+}

@@ -15,7 +15,7 @@ MbD::PointInPlaneJoint::PointInPlaneJoint()
 {
 }
 
-MbD::PointInPlaneJoint::PointInPlaneJoint(const std::string&)
+MbD::PointInPlaneJoint::PointInPlaneJoint(const std::string& str) : InPlaneJoint(str)
 {
 }
 

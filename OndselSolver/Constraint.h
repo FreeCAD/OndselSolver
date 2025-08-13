@@ -53,6 +53,7 @@ namespace MbD {
 		void setqsuddotlam(FColDsptr col) override;
 		void setqsulam(FColDsptr col) override;
 		virtual ConstraintType type();
+		virtual std::string constraintSpec() = 0;
 		
 		size_t iG = SIZE_MAX;
 		double aG = 0.0;		//Constraint function

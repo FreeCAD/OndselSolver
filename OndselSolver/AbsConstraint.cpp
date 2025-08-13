@@ -35,6 +35,11 @@ void AbsConstraint::useEquationNumbers()
     iqXminusOnePlusAxis = static_cast<PartFrame*>(owner)->iqX + axis;
 }
 
+std::string MbD::AbsConstraint::constraintSpec()
+{
+    return "AbsConstraint" + MbDMath::XYZFromInt(axis);
+}
+
 void AbsConstraint::fillPosICJacob(SpMatDsptr mat)
 {
     mat->atijplusNumber(iG, iqXminusOnePlusAxis, 1.0);

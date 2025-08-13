@@ -192,3 +192,8 @@ void MbD::DistancexyConstraintIqcJqc::useEquationNumbers()
 	iqXJ = frmJeqc->iqX();
 	iqEJ = frmJeqc->iqE();
 }
+
+std::string MbD::DistancexyConstraintIqcJqc::constraintSpec()
+{
+	return "DistancexyConstraintIJ";
+}

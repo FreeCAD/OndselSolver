@@ -16,7 +16,7 @@ MbD::PlanarJoint::PlanarJoint()
 {
 }
 
-MbD::PlanarJoint::PlanarJoint(const std::string&)
+MbD::PlanarJoint::PlanarJoint(const std::string& str) : InPlaneJoint(str)
 {
 }
 
@@ -25,8 +25,8 @@ void MbD::PlanarJoint::initializeGlobally()
 	if (constraints->empty())
 	{
 		this->createInPlaneConstraint();
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 0));
-		addConstraint(CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 1));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 0));
+		addConstraint(CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 1));
 		this->root()->hasChanged = true;
 	}
 	else {

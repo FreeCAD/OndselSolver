@@ -94,6 +94,15 @@ void MbD::ConstraintSet::useEquationNumbers()
 	constraintsDo([](std::shared_ptr<Constraint> constraint) { constraint->useEquationNumbers(); });
 }
 
+std::string MbD::ConstraintSet::constraintSpecs()
+{
+	std::stringstream ss;
+	constraintsDo([&](std::shared_ptr<Constraint> con) {
+		ss << con->constraintSpec() << std::endl;
+		});
+	return ss.str();
+}
+
 void MbD::ConstraintSet::setqsulam(FColDsptr col)
 {
 	constraintsDo([&](std::shared_ptr<Constraint> con) { con->setqsulam(col); });

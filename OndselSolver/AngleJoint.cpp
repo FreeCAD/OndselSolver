@@ -25,7 +25,7 @@ void MbD::AngleJoint::initializeGlobally()
 {
 	if (constraints->empty())
 	{
-		auto dirCosIzJz = CREATE<DirectionCosineConstraintIJ>::ConstraintWith(frmI, frmJ, 2, 2);
+		auto dirCosIzJz = CREATE<DirectionCosineConstraintIqcJqc>::ConstraintWith(frmI, frmJ, 2, 2);
 		dirCosIzJz->setConstant(std::cos(theIzJz));
 		addConstraint(dirCosIzJz);
 		this->root()->hasChanged = true;

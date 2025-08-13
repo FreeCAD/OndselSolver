@@ -43,6 +43,11 @@ void AtPointConstraintIqcJqc::useEquationNumbers()
 	iqEJ = frmJeqc->iqE();
 }
 
+std::string MbD::AtPointConstraintIqcJqc::constraintSpec()
+{
+	return "AtPointConstraintIJ" + MbDMath::XYZFromInt(axis);
+}
+
 void AtPointConstraintIqcJqc::fillPosICError(FColDsptr col)
 {
 	AtPointConstraintIqcJc::fillPosICError(col);

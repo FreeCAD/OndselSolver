@@ -41,6 +41,11 @@ void TranslationConstraintIqcJqc::useEquationNumbers()
 	iqEJ = frmJeqc->iqE();
 }
 
+std::string MbD::TranslationConstraintIqcJqc::constraintSpec()
+{
+	return "TranslationConstraintI" + MbDMath::xyzFromInt(axisI) + "J";
+}
+
 void TranslationConstraintIqcJqc::fillPosICError(FColDsptr col)
 {
 	TranslationConstraintIqcJc::fillPosICError(col);

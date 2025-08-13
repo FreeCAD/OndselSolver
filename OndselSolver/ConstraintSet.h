@@ -53,7 +53,7 @@ namespace MbD {
 		void setqsudotlam(FColDsptr col) override;
 		void setqsulam(FColDsptr col) override;
 		void useEquationNumbers() override;
-
+		std::string constraintSpecs();
 
 		std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> constraints;
 

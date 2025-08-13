@@ -23,6 +23,7 @@ namespace MbD {
 		void preAccIC() override;
 		void preVelIC() override;
 		ConstraintType type() override;
+		std::string constraintSpec() override;
 
 		double pGpt = std::numeric_limits<double>::min();
 		FRowDsptr ppGpEIpt;
