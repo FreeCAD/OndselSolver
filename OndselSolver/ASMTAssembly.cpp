@@ -398,8 +398,8 @@ void MbD::ASMTAssembly::runFile(const std::string& fileName)
     while (std::getline(stream, line)) {
         lines.push_back(line);
     }
-    bool bool1 = lines[0] == "freeCAD: 3D CAD with Motion Simulation  by  askoh.com";
-    bool bool2 = lines[0] == "OndselSolver";
+    [[maybe_unused]] bool bool1 = lines[0] == "freeCAD: 3D CAD with Motion Simulation  by  askoh.com";
+    [[maybe_unused]] bool bool2 = lines[0] == "OndselSolver";
     assert(bool1 || bool2);
     lines.erase(lines.begin());
 
@@ -435,7 +435,6 @@ void MbD::ASMTAssembly::runDraggingLogTest3()
 
 void MbD::ASMTAssembly::runDraggingTest()
 {
-    // auto assembly = ASMTAssembly::assemblyFromFile("../../testapp/pistonWithLimits.asmt");
     auto assembly = ASMTAssembly::assemblyFromFile("../../testapp/dragCrankSlider.asmt");
     assembly->setDebug(true);
 
@@ -475,7 +474,6 @@ void MbD::ASMTAssembly::runDraggingTest()
 
 void MbD::ASMTAssembly::runDraggingTest2()
 {
-    // auto assembly = ASMTAssembly::assemblyFromFile("../../testapp/pistonWithLimits.asmt");
     auto assembly = ASMTAssembly::assemblyFromFile("../../testapp/dragCrankSlider.asmt");
     assembly->setDebug(true);
 
@@ -556,8 +554,8 @@ void MbD::ASMTAssembly::readWriteFile(const std::string& fileName)
     while (std::getline(stream, line)) {
         lines.push_back(line);
     }
-    bool bool1 = lines[0] == "freeCAD: 3D CAD with Motion Simulation  by  askoh.com";
-    bool bool2 = lines[0] == "OndselSolver";
+    [[maybe_unused]] bool bool1 = lines[0] == "freeCAD: 3D CAD with Motion Simulation  by  askoh.com";
+    [[maybe_unused]] bool bool2 = lines[0] == "OndselSolver";
     assert(bool1 || bool2);
     lines.erase(lines.begin());
 
@@ -1285,14 +1283,9 @@ void MbD::ASMTAssembly::outputFile(const std::string& filename)
 {
     std::ofstream os(filename);
     os << std::setprecision(std::numeric_limits<double>::max_digits10);
-    //	try {
     os << "OndselSolver" << std::endl;
     storeOnLevel(os, 0);
     os.close();
-    //	}
-    //	catch (...) {
-    //		os.close();
-    //	}
 }
 
 void MbD::ASMTAssembly::storeOnLevel(std::ofstream& os, size_t level)
@@ -1422,7 +1415,6 @@ void MbD::ASMTAssembly::runDragStep(
 void MbD::ASMTAssembly::runPostDrag()
 {
     if (debug) {
-        // outputFile("runPostDrag.asmt");
         std::ofstream os("dragging.log", std::ios_base::app);
         os << "runPostDrag" << std::endl;
         os.close();
@@ -1456,8 +1448,6 @@ void MbD::ASMTAssembly::initprincipalMassMarker()
     principalMassMarker->mass = 0.0;
     principalMassMarker->density = 0.0;
     principalMassMarker->momentOfInertias = std::make_shared<DiagonalMatrix<double>>(3, 0);
-    // principalMassMarker->position3D = std::make_shared<FullColumn<double>>(3, 0);
-    // principalMassMarker->rotationMatrix = FullMatrix<double>>::identitysptr(3);
 }
 
 std::shared_ptr<ASMTSpatialContainer>
@@ -1591,11 +1581,6 @@ void MbD::ASMTAssembly::compareResults(AnalysisType type)
 void MbD::ASMTAssembly::outputResults(AnalysisType type)
 {
     (void) type;
-	//ASMTSpatialContainer::outputResults(type);
-	//for (auto& part : *parts) part->outputResults(type);
-	//for (auto& joint : *joints) joint->outputResults(type);
-	//for (auto& motion : *motions) motion->outputResults(type);
-	//for (auto& forceTorque : *forcesTorques) forceTorque->outputResults(type);
 }
 
 void MbD::ASMTAssembly::addPart(std::shared_ptr<ASMTPart> part)
@@ -1722,9 +1707,6 @@ void MbD::ASMTAssembly::storeOnLevelLimits(std::ofstream& os, size_t level)
 void MbD::ASMTAssembly::storeOnLevelGeneralConstraintSets(std::ofstream& os, size_t level)
 {
     storeOnLevelString(os, level, "GeneralConstraintSets");
-    // for (auto& generalConstraintSet : *generalConstraintSets) {
-    //	generalConstraintSet->storeOnLevel(os, level);
-    // }
 }
 
 void MbD::ASMTAssembly::storeOnTimeSeries(std::ofstream& os)
@@ -1776,13 +1758,4 @@ void MbD::ASMTAssembly::updateForFrame(size_t index)
     for (auto& part : *parts) {
         part->updateForFrame(index);
     }
-    //for (auto& joint : *joints) {
-    //    joint->updateForFrame(index);
-    //}
-    //for (auto& motion : *motions) {
-    //    motion->updateForFrame(index);
-    //}
-    //for (auto& forceTorque : *forcesTorques) {
-    //    forceTorque->updateForFrame(index);
-    //}
 }
