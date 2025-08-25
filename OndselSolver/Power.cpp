@@ -6,6 +6,7 @@
  *   See LICENSE file for details about copyright.                         *
  ***************************************************************************/
 
+#include <algorithm>
 #include "Power.h"
 #include "Constant.h"
 #include "Ln.h"
