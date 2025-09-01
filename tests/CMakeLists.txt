@@ -56,14 +56,22 @@ target_sources(test_run
 	PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/test.cpp
 )
-target_link_libraries(test_run
-    GTest::gtest_main
-    gmock_main
-    ${Google_Tests_LIBS}
-    OndselSolver
-)
+if(GTest_FOUND)
+    target_link_libraries(test_run
+        GTest::gtest_main
+        GTest::gmock_main
+        OndselSolver
+    )
+else()
+    target_link_libraries(test_run
+        gtest_main
+        gmock_main
+        ${Google_Tests_LIBS}
+        OndselSolver
+    )
 
-include(GoogleTest)
+    include(GoogleTest)
+endif()
 # discovers tests by asking the compiled test executable to enumerate its tests
 set(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
 
