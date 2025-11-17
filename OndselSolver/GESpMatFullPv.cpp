@@ -115,8 +115,8 @@ void GESpMatFullPv::backSubstituteIntoDU()
 //    assert(n < localLen);
 
 	answerX = std::make_shared<FullColumn<double>>(m);
-	auto jn = colOrder->at(n);
-	answerX->at(jn) = rightHandSideB->at(m) / matrixA->at(m)->at(jn);
+	auto jn = colOrder->at(n - 1);
+	answerX->at(jn) = rightHandSideB->at(m - 1) / matrixA->at(m - 1)->at(jn);
 	//auto rhsZeroElement = this->rhsZeroElement();
 	for (ssize_t i = (ssize_t)n - 2; i >= 0; i--)	//Use ssize_t because of decrement
 	{
