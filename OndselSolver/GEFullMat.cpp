@@ -24,7 +24,7 @@ void GEFullMat::backSubstituteIntoDU()
 	for (ssize_t i = (ssize_t)n - 2; i >= 0; i--)	//Use ssize_t because of decrement
 	{
 		auto rowi = matrixA->at(i);
-		double sum = answerX->at(n) * rowi->at(n);
+		double sum = answerX->at(n - 1) * rowi->at(n - 1);
 		for (size_t j = i + 1; j < n - 1; j++)
 		{
 			sum += answerX->at(j) * rowi->at(j);
