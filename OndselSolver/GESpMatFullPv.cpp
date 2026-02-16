@@ -140,7 +140,6 @@ void GESpMatFullPv::backSubstituteIntoDU()
 
 void GESpMatFullPv::postSolve()
 {
-	throw SimulationStoppingError("To be implemented.");
 }
 
 void GESpMatFullPv::preSolvewithsaveOriginal(SpMatDsptr spMat, FColDsptr fullCol, bool saveOriginal)
