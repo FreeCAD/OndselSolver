@@ -45,18 +45,29 @@ void MbD::PosICDragLimitNewtonRaphson::run()
 		return;
 	}
 	auto limits = system->limits();
-	std::partition(limits->begin(), limits->end(), [](auto limit) { return !limit->satisfied(); });
-	//Violated limits are in front.
-	for (auto it = limits->begin(); it != limits->end(); it++) {
-		auto limit = *it;
-		limit->activate();
+	for (size_t i = 0; i < limits->size(); i++) {
+		bool activatedLimit = false;
+		for (auto& limit : *limits) {
+			// Keep earlier violated limits active while adding newly violated ones.
+			if (!limit->active && !limit->satisfied()) {
+				limit->activate();
+				activatedLimit = true;
+			}
+		}
+		if (!activatedLimit) {
+			break;
+		}
+
 		preRun();
 		initializeLocally();
 		initializeGlobally();
 		iterate();
 		postRun();
-		system->deactivateLimits();
-		if (system->limitsSatisfied()) return;
+		if (system->limitsSatisfied()) {
+			system->deactivateLimits();
+			return;
+		}
 	}
-	throw SimulationStoppingError("Limits cannot be satisfiled.");
+	system->deactivateLimits();
+	throw SimulationStoppingError("Limits cannot be satisfied.");
 }
