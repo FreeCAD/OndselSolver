@@ -19,9 +19,10 @@ namespace MbD {
 		GearJoint(const std::string& str);
 
 		//void initializeLocally() override;
+		void setCarrierFrame(EndFrmsptr carrierFrame);
 		void initializeGlobally() override;
 
+		EndFrmsptr frmK;
 		double radiusI = 0.0, radiusJ = 0.0, aConstant = 0.0;
 	};
 }
-

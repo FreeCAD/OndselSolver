@@ -555,6 +555,9 @@
     <ClCompile Include="GearJoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CoaxialGearConstraintIJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="PointInLineJoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1512,6 +1515,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GearJoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CoaxialGearConstraintIJ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PointInLineJoint.h">

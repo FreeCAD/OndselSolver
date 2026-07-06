@@ -100,6 +100,7 @@ set(ONDSELSOLVER_SRC
         Constant.cpp
         ConstantGravity.cpp
         ConstantVelocityJoint.cpp
+        CoaxialGearConstraintIJ.cpp
         Constraint.cpp
         ConstraintIJ.cpp
         ConstraintSet.cpp
@@ -416,6 +417,7 @@ set(ONDSELSOLVER_HEADERS
         Constant.h
         ConstantGravity.h
         ConstantVelocityJoint.h
+        CoaxialGearConstraintIJ.h
         Constraint.h
         ConstraintIJ.h
         ConstraintSet.h

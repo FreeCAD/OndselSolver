@@ -230,6 +230,7 @@
     <ClCompile Include="Constant.cpp" />
     <ClCompile Include="ConstantGravity.cpp" />
     <ClCompile Include="ConstantVelocityJoint.cpp" />
+    <ClCompile Include="CoaxialGearConstraintIJ.cpp" />
     <ClCompile Include="Constraint.cpp" />
     <ClCompile Include="ConstraintIJ.cpp" />
     <ClCompile Include="ConstraintSet.cpp" />
@@ -549,6 +550,7 @@
     <ClInclude Include="Constant.h" />
     <ClInclude Include="ConstantGravity.h" />
     <ClInclude Include="ConstantVelocityJoint.h" />
+    <ClInclude Include="CoaxialGearConstraintIJ.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="ConstraintIJ.h" />
     <ClInclude Include="ConstraintSet.h" />
