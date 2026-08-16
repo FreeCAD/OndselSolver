@@ -140,7 +140,8 @@ void GESpMatFullPv::backSubstituteIntoDU()
 
 void GESpMatFullPv::postSolve()
 {
-	throw SimulationStoppingError("To be implemented.");
+	//"answerX is already in original column order (written via colOrder), nothing to do."
+	//Empty like GESpMatParPv::postSolve().
 }
 
 void GESpMatFullPv::preSolvewithsaveOriginal(SpMatDsptr spMat, FColDsptr fullCol, bool saveOriginal)
