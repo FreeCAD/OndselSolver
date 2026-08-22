@@ -34,9 +34,9 @@ void PosICNewtonRaphson::run()
 		}
 		catch (const SingularMatrixError& ex) {
 			auto redundantEqnNos = ex.getRedundantEqnNos();
-			system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->removeRedundantConstraints(redundantEqnNos); });
-			system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->constraintsReport(); });
-			system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->setqsu(qsuOld); });
+			system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->removeRedundantConstraints(redundantEqnNos); });
+			system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->constraintsReport(); });
+			system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->setqsu(qsuOld); });
 		}
 	}
 }

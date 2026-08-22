@@ -15,11 +15,23 @@ namespace MbD {
 
     class PosICDragNewtonRaphson : public AnyPosICNewtonRaphson
     {
-        //Kinematics with under constrained system
+        //Dragging of constrained or under constrained system
+        //Assume no redundant constraints
+        //Limits are used in dragging only
     public:
         static std::shared_ptr<PosICDragNewtonRaphson> With();
+
         void initializeGlobally() override;
-        void setdragParts(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts);
+        void fillY() override;
+        void fillPyPx() override;
+        void passRootToSystem() override;
+        void assignEquationNumbers() override;
+
+        void preRun() override;
+        void askSystemToUpdate() override;
+        void postRun() override;
+
+        void setdragParts(std::shared_ptr<std::vector<std::shared_ptr<Part>>> _dragParts);
 
         std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts;
     };

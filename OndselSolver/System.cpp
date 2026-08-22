@@ -108,6 +108,7 @@ void System::clear()
 	name = std::string();
 	parts->clear();
 	jointsMotions->clear();
+	limits->clear();
 	forcesTorques->clear();
 }
 
@@ -215,6 +216,13 @@ std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> System::allRedundantCo
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> System::allConstraints()
+{
+	auto constraints = std::make_shared<std::vector<std::shared_ptr<Constraint>>>();
+	this->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->fillConstraints(constraints); });
+	return constraints;
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> System::allConstraintsLimits()
 {
 	auto constraints = std::make_shared<std::vector<std::shared_ptr<Constraint>>>();
 	this->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->fillConstraints(constraints); });

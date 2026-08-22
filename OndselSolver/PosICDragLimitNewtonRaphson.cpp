@@ -22,19 +22,6 @@ void MbD::PosICDragLimitNewtonRaphson::preRun()
 
 }
 
-void MbD::PosICDragLimitNewtonRaphson::initializeGlobally()
-{
-	AnyPosICNewtonRaphson::initializeGlobally();
-	iterMax = system->iterMaxPosKine;
-	dxTol = system->errorTolPosKine;
-}
-
-void MbD::PosICDragLimitNewtonRaphson::setdragParts(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts)
-{
-    (void) dragParts;
-	throw SimulationStoppingError("To be implemented.");
-}
-
 void MbD::PosICDragLimitNewtonRaphson::run()
 {
 	preRun();

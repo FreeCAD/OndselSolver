@@ -170,13 +170,15 @@ void SystemSolver::runPreDrag()
 {
 	initializeLocally();
 	initializeGlobally();
+	//Redundant constraints are removed here.
 	runPosIC();
 }
 
 void MbD::SystemSolver::runDragStep(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts)
 {
+	//Assume no redundant constraints
 	runPosICDrag(dragParts);
-	runPosICDragLimit();
+	runPosICDragLimit(dragParts);
 }
 
 void SystemSolver::runQuasiKinematic()
@@ -214,6 +216,7 @@ void SystemSolver::runAccKine()
 
 void MbD::SystemSolver::runPosICDrag(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts)
 {
+	//Assume no redundant constraints
 	auto newtonRaphson = PosICDragNewtonRaphson::With();
 	newtonRaphson->setdragParts(dragParts);
 	icTypeSolver = newtonRaphson;
@@ -221,9 +224,11 @@ void MbD::SystemSolver::runPosICDrag(std::shared_ptr<std::vector<std::shared_ptr
 	icTypeSolver->run();
 }
 
-void MbD::SystemSolver::runPosICDragLimit()
+void MbD::SystemSolver::runPosICDragLimit(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts)
 {
+	//Assume no redundant constraints
 	auto newtonRaphson = PosICDragLimitNewtonRaphson::With();
+	newtonRaphson->setdragParts(dragParts);
 	icTypeSolver = newtonRaphson;
 	icTypeSolver->setSystem(this);
 	icTypeSolver->run();
@@ -293,6 +298,11 @@ std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> SystemSolver::allRedun
 std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> SystemSolver::allConstraints()
 {
 	return system->allConstraints();
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> MbD::SystemSolver::allConstraintsLimits()
+{
+	return system->allConstraintsLimits();
 }
 
 void SystemSolver::postNewtonRaphson()

@@ -50,18 +50,18 @@ void VelKineSolver::assignEquationNumbers()
 void VelKineSolver::run()
 {
 	system->logString("MbD: Solving for kinematic velocity.");
-	system->partsJointsMotionsLimitsDo([](std::shared_ptr<Item> item) { item->preVelIC(); });
+	system->partsJointsMotionsDo([](std::shared_ptr<Item> item) { item->preVelIC(); });
 	this->assignEquationNumbers();
-	system->partsJointsMotionsLimitsDo([](std::shared_ptr<Item> item) { item->useEquationNumbers(); });
+	system->partsJointsMotionsDo([](std::shared_ptr<Item> item) { item->useEquationNumbers(); });
 	errorVector = std::make_shared<FullColumn<double>>(n);
 	jacobian = std::make_shared<SparseMatrix<double>>(n, n);
 	errorVector->zeroSelf();
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->fillVelICError(errorVector); });
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->fillVelICError(errorVector); });
 	jacobian->zeroSelf();
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->fillPosKineJacob(jacobian); });
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->fillPosKineJacob(jacobian); });
 	matrixSolver = this->matrixSolverClassNew();
 	this->solveEquations();
 	auto& qsudot = this->x;
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->setqsudot(qsudot); });
-	system->partsJointsMotionsLimitsDo([](std::shared_ptr<Item> item) { item->postVelIC(); });
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->setqsudot(qsudot); });
+	system->partsJointsMotionsDo([](std::shared_ptr<Item> item) { item->postVelIC(); });
 }

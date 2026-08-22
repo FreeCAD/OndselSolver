@@ -20,7 +20,7 @@ using namespace MbD;
 
 void AccNewtonRaphson::askSystemToUpdate()
 {
-	system->partsJointsMotionsLimitsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->postAccICIteration(); });
+	system->partsJointsMotionsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->postAccICIteration(); });
 }
 
 void AccNewtonRaphson::assignEquationNumbers()
@@ -57,7 +57,7 @@ void AccNewtonRaphson::assignEquationNumbers()
 void AccNewtonRaphson::fillPyPx()
 {
 	pypx->zeroSelf();
-	system->partsJointsMotionsLimitsForcesTorquesDo([&](std::shared_ptr<Item> item) {
+	system->partsJointsMotionsForcesTorquesDo([&](std::shared_ptr<Item> item) {
 		item->fillAccICIterJacob(pypx);
 		});
 }
@@ -65,7 +65,7 @@ void AccNewtonRaphson::fillPyPx()
 void AccNewtonRaphson::fillY()
 {
 	y->zeroSelf();
-	system->partsJointsMotionsLimitsForcesTorquesDo([&](std::shared_ptr<Item> item) {
+	system->partsJointsMotionsForcesTorquesDo([&](std::shared_ptr<Item> item) {
 		item->fillAccICIterError(y);
 		//std::cout << item->name << *y << std::endl;
 		});
@@ -97,7 +97,7 @@ void AccNewtonRaphson::incrementIterNo()
 void AccNewtonRaphson::initializeGlobally()
 {
 	SystemNewtonRaphson::initializeGlobally();
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->fillqsuddotlam(x); });
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->fillqsuddotlam(x); });
 }
 
 void AccNewtonRaphson::logSingularMatrixMessage()
@@ -110,17 +110,17 @@ void AccNewtonRaphson::logSingularMatrixMessage()
 
 void AccNewtonRaphson::passRootToSystem()
 {
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->setqsuddotlam(x); });
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->setqsuddotlam(x); });
 }
 
 void AccNewtonRaphson::postRun()
 {
-	system->partsJointsMotionsLimitsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->postAccIC(); });
+	system->partsJointsMotionsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->postAccIC(); });
 }
 
 void AccNewtonRaphson::preRun()
 {
-	system->partsJointsMotionsLimitsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->preAccIC(); });
+	system->partsJointsMotionsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->preAccIC(); });
 }
 
 void MbD::AccNewtonRaphson::handleSingularMatrix()

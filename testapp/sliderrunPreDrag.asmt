@@ -1,0 +1,434 @@
+OndselSolver
+Assembly
+	Notes
+		(Text string: '' runs: (Core.RunArray runs: #() values: #()))
+	Name
+		OndselAssembly
+	Position3D
+		0	0	0	
+	RotationMatrix
+		1	0	0	
+		0	1	0	
+		0	0	1	
+	Velocity3D
+		0	0	0	
+	Omega3D
+		0	0	0	
+	RefPoints
+		RefPoint
+			Position3D
+				0	0	0	
+			RotationMatrix
+				1	0	0	
+				0	1	0	
+				0	0	1	
+			Markers
+				Marker
+					Name
+						marker-slider_issue#Part006
+					Position3D
+						-51.501968383789062	-51.632484436035156	14.6734504699707	
+					RotationMatrix
+						1	0	0	
+						0	1	0	
+						0	0	1	
+		RefPoint
+			Position3D
+				0	0	0	
+			RotationMatrix
+				1	0	0	
+				0	1	0	
+				0	0	1	
+			Markers
+				Marker
+					Name
+						marker-slider_issue#Origin012
+					Position3D
+						0	0	0	
+					RotationMatrix
+						1	0	0	
+						0	1	0	
+						0	0	1	
+	RefCurves
+	RefSurfaces
+	Parts
+		Part
+			Name
+				slider_issue#Origin012
+			Position3D
+				0	0	0	
+			RotationMatrix
+				1	0	0	
+				0	1	0	
+				0	0	1	
+			Velocity3D
+				0	0	0	
+			Omega3D
+				0	0	0	
+			FeatureOrder
+			PrincipalMassMarker
+				Name
+					MassMarker
+				Position3D
+					0	0	0	
+				RotationMatrix
+					1	0	0	
+					0	1	0	
+					0	0	1	
+				Mass
+					1
+				MomentOfInertias
+					1	1	1	
+				Density
+					1
+			RefPoints
+				RefPoint
+					Position3D
+						0	0	0	
+					RotationMatrix
+						1	0	0	
+						0	1	0	
+						0	0	1	
+					Markers
+						Marker
+							Name
+								FixingMarker
+							Position3D
+								0	0	0	
+							RotationMatrix
+								1	0	0	
+								0	1	0	
+								0	0	1	
+			RefCurves
+			RefSurfaces
+		Part
+			Name
+				slider_issue#Part005
+			Position3D
+				-51.501968383789062	-172.15567779541016	-15.32654953002927	
+			RotationMatrix
+				1	0	0	
+				0	1	0	
+				0	0	1	
+			Velocity3D
+				0	0	0	
+			Omega3D
+				0	0	0	
+			FeatureOrder
+			PrincipalMassMarker
+				Name
+					MassMarker
+				Position3D
+					0	0	0	
+				RotationMatrix
+					1	0	0	
+					0	1	0	
+					0	0	1	
+				Mass
+					1
+				MomentOfInertias
+					1	1	1	
+				Density
+					1
+			RefPoints
+				RefPoint
+					Position3D
+						0	0	0	
+					RotationMatrix
+						1	0	0	
+						0	1	0	
+						0	0	1	
+					Markers
+						Marker
+							Name
+								slider_issue#Joint002
+							Position3D
+								0	-5	29.999999999999996	
+							RotationMatrix
+								1	0	0	
+								0	2.2204460492503131e-16	-1	
+								0	1	2.2204460492503131e-16	
+			RefCurves
+			RefSurfaces
+		Part
+			Name
+				slider_issue#Part006
+			Position3D
+				-51.501968383789062	-51.632484436035156	14.6734504699707	
+			RotationMatrix
+				1	0	0	
+				0	1	0	
+				0	0	1	
+			Velocity3D
+				0	0	0	
+			Omega3D
+				0	0	0	
+			FeatureOrder
+			PrincipalMassMarker
+				Name
+					MassMarker
+				Position3D
+					0	0	0	
+				RotationMatrix
+					1	0	0	
+					0	1	0	
+					0	0	1	
+				Mass
+					1
+				MomentOfInertias
+					1	1	1	
+				Density
+					1
+			RefPoints
+				RefPoint
+					Position3D
+						0	0	0	
+					RotationMatrix
+						1	0	0	
+						0	1	0	
+						0	0	1	
+					Markers
+						Marker
+							Name
+								FixingMarker
+							Position3D
+								0	0	0	
+							RotationMatrix
+								1	0	0	
+								0	1	0	
+								0	0	1	
+				RefPoint
+					Position3D
+						0	0	0	
+					RotationMatrix
+						1	0	0	
+						0	1	0	
+						0	0	1	
+					Markers
+						Marker
+							Name
+								slider_issue#Joint002
+							Position3D
+								0	-100	2.1316282072803006e-14	
+							RotationMatrix
+								1	0	0	
+								0	2.2204460492503131e-16	-1	
+								0	1	2.2204460492503131e-16	
+			RefCurves
+			RefSurfaces
+	KinematicIJs
+	ConstraintSets
+		Joints
+			FixedJoint
+				Name
+					slider_issue#Part006
+				MarkerI
+					/OndselAssembly/marker-slider_issue#Part006
+				MarkerJ
+					/OndselAssembly/slider_issue#Part006/FixingMarker
+			FixedJoint
+				Name
+					slider_issue#Origin012
+				MarkerI
+					/OndselAssembly/marker-slider_issue#Origin012
+				MarkerJ
+					/OndselAssembly/slider_issue#Origin012/FixingMarker
+			CylindricalJoint
+				Name
+					slider_issue#Joint002
+				MarkerI
+					/OndselAssembly/slider_issue#Part005/slider_issue#Joint002
+				MarkerJ
+					/OndselAssembly/slider_issue#Part006/slider_issue#Joint002
+		Motions
+		Limits
+			TranslationLimit
+				Name
+					slider_issue#Joint002-LimitLenMax
+				MarkerI
+					/OndselAssembly/slider_issue#Part005/slider_issue#Joint002
+				MarkerJ
+					/OndselAssembly/slider_issue#Part006/slider_issue#Joint002
+				MotionJoint
+					
+				Limit
+					83.940000
+				Type
+					=<
+				Tol
+					1.0e-9
+			TranslationLimit
+				Name
+					slider_issue#Joint002-LimitLenMin
+				MarkerI
+					/OndselAssembly/slider_issue#Part005/slider_issue#Joint002
+				MarkerJ
+					/OndselAssembly/slider_issue#Part006/slider_issue#Joint002
+				MotionJoint
+					
+				Limit
+					-83.700000
+				Type
+					=>
+				Tol
+					1.0e-9
+			RotationLimit
+				Name
+					slider_issue#Joint002-LimitRotMax
+				MarkerI
+					/OndselAssembly/slider_issue#Part005/slider_issue#Joint002
+				MarkerJ
+					/OndselAssembly/slider_issue#Part006/slider_issue#Joint002
+				MotionJoint
+					
+				Limit
+					44.093000*pi/180.0
+				Type
+					=<
+				Tol
+					1.0e-9
+			RotationLimit
+				Name
+					slider_issue#Joint002-LimitRotMin
+				MarkerI
+					/OndselAssembly/slider_issue#Part005/slider_issue#Joint002
+				MarkerJ
+					/OndselAssembly/slider_issue#Part006/slider_issue#Joint002
+				MotionJoint
+					
+				Limit
+					0.000000*pi/180.0
+				Type
+					=>
+				Tol
+					1.0e-9
+		GeneralConstraintSets
+	ForceTorques
+	ConstantGravity
+		0	0	0	
+	SimulationParameters
+		tstart
+			0
+		tend
+			1
+		hmin
+			1.0000000000000001e-09
+		hmax
+			1000000000
+		hout
+			0.10000000000000001
+		errorTol
+			9.9999999999999995e-07
+	AnimationParameters
+		nframe
+			1000000
+		icurrent
+			1
+		istart
+			1
+		iend
+			1000000
+		isForward
+			true
+		framesPerSecond
+			30
+TimeSeries
+Number	Input	
+Time	Input	
+AssemblySeries	/OndselAssembly
+X	0	
+Y	0	
+Z	0	
+Bryantx	-0	
+Bryanty	0	
+Bryantz	-0	
+VX	0	
+VY	0	
+VZ	0	
+OmegaX	0	
+OmegaY	0	
+OmegaZ	0	
+AX	0	
+AY	0	
+AZ	0	
+AlphaX	0	
+AlphaY	0	
+AlphaZ	0	
+PartSeries	/OndselAssembly/slider_issue#Origin012
+X	0	
+Y	0	
+Z	0	
+Bryantx	-0	
+Bryanty	0	
+Bryantz	-0	
+VX	0	
+VY	0	
+VZ	0	
+OmegaX	0	
+OmegaY	0	
+OmegaZ	0	
+AX	0	
+AY	0	
+AZ	0	
+AlphaX	0	
+AlphaY	0	
+AlphaZ	0	
+PartSeries	/OndselAssembly/slider_issue#Part005
+X	-51.501968383789062	
+Y	-172.15567779541016	
+Z	-15.32654953002927	
+Bryantx	-0	
+Bryanty	0	
+Bryantz	-0	
+VX	0	
+VY	0	
+VZ	0	
+OmegaX	0	
+OmegaY	0	
+OmegaZ	0	
+AX	0	
+AY	0	
+AZ	0	
+AlphaX	0	
+AlphaY	0	
+AlphaZ	0	
+PartSeries	/OndselAssembly/slider_issue#Part006
+X	-51.501968383789062	
+Y	-51.632484436035156	
+Z	14.6734504699707	
+Bryantx	-0	
+Bryanty	0	
+Bryantz	-0	
+VX	0	
+VY	0	
+VZ	0	
+OmegaX	0	
+OmegaY	0	
+OmegaZ	0	
+AX	0	
+AY	0	
+AZ	0	
+AlphaX	0	
+AlphaY	0	
+AlphaZ	0	
+FixedJointSeries	/OndselAssembly/slider_issue#Part006
+FXonI	0	
+FYonI	0	
+FZonI	0	
+TXonI	0	
+TYonI	0	
+TZonI	0	
+FixedJointSeries	/OndselAssembly/slider_issue#Origin012
+FXonI	0	
+FYonI	0	
+FZonI	0	
+TXonI	0	
+TYonI	0	
+TZonI	0	
+CylindricalJointSeries	/OndselAssembly/slider_issue#Joint002
+FXonI	0	
+FYonI	0	
+FZonI	0	
+TXonI	0	
+TYonI	0	
+TZonI	0	

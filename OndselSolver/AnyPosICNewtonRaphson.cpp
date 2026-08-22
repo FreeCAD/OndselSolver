@@ -25,7 +25,7 @@ void AnyPosICNewtonRaphson::initialize()
 void AnyPosICNewtonRaphson::initializeGlobally()
 {
 	SystemNewtonRaphson::initializeGlobally();
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) {
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) {
 		item->fillqsu(qsuOld);
 		item->fillqsuWeights(qsuWeights);
 		item->fillqsulam(x);
@@ -45,7 +45,7 @@ void AnyPosICNewtonRaphson::fillY()
 	newMinusOld->equalSelfPlusFullColumnAt(x, 0);
 	y->zeroSelf();
 	y->atiminusFullColumn(0, (qsuWeights->timesFullColumn(newMinusOld)));
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) {
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) {
 		item->fillPosICError(y);
 		//std::cout << item->name << *y << std::endl;
 		//noop();
@@ -57,7 +57,7 @@ void AnyPosICNewtonRaphson::fillPyPx()
 {
 	pypx->zeroSelf();
 	pypx->atijminusDiagonalMatrix(0, 0, qsuWeights);
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) {
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) {
 		item->fillPosICJacob(pypx);
 		//std::cout << *(pypx->at(3)) << std::endl;
 		});
@@ -66,7 +66,7 @@ void AnyPosICNewtonRaphson::fillPyPx()
 
 void AnyPosICNewtonRaphson::passRootToSystem()
 {
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) { item->setqsulam(x); });
+	system->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->setqsulam(x); });
 }
 
 void MbD::AnyPosICNewtonRaphson::assignEquationNumbers()

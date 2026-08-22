@@ -23,13 +23,13 @@ void sharedptrTest();
 
 int main()
 {
-	ASMTAssembly::runFile("C:/Users/askoh/Downloads/pistonDebug.asmt");
-	return 0;
-	//auto assembly = ASMTAssembly::assemblyFromFile("C:/Users/askoh/OneDrive/askoh/visualstudio/Ondsel/OndselFreeCAD/build/src/Main/runPreDrag.asmt");
-	//assembly->runDraggingLog("C:/Users/askoh/OneDrive/askoh/visualstudio/Ondsel/OndselFreeCAD/build/src/Main/dragging.log");
+	//ASMTAssembly::runFile("C:/Users/askoh/Documents/askoh/FreeCAD/FreeCAD_weekly-2025.09.24-Windows-x86_64-py311/bin/slider_issue.asmt");
 	//return 0;
-	auto assembly = ASMTAssembly::assemblyFromFile(std::string(TEST_DATA_PATH) + "/runPreDragBackhoe3.asmt");
-	assembly->runDraggingLog(std::string(TEST_DATA_PATH) + "/draggingBackhoe3.log");
+	auto assembly = ASMTAssembly::assemblyFromFile("C:/Users/askoh/OneDrive/askoh/visualstudio/Ondsel/OndselFreeCAD/build/src/Main/runPreDrag.asmt");
+	assembly->runDraggingLog("C:/Users/askoh/OneDrive/askoh/visualstudio/Ondsel/OndselFreeCAD/build/src/Main/dragging.log");
+	return 0;
+	//auto assembly = ASMTAssembly::assemblyFromFile(std::string(TEST_DATA_PATH) + "/runPreDragBackhoe3.asmt");
+	//assembly->runDraggingLog(std::string(TEST_DATA_PATH) + "/draggingBackhoe3.log");
 	//return 0;
 	ASMTAssembly::runDraggingLogTest3();
 	ASMTAssembly::runDraggingLogTest2();

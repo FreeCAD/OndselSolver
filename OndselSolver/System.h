@@ -61,6 +61,7 @@ namespace MbD {
 		std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> perpendicularConstraints();
 		std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> allRedundantConstraints();
 		std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> allConstraints();
+		std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> allConstraintsLimits();
 		void addPart(std::shared_ptr<Part> part);
 		void addJoint(std::shared_ptr<Joint> joint);
 		void addMotion(std::shared_ptr<PrescribedMotion> motion);

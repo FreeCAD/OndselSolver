@@ -32,8 +32,17 @@ TEST(OndselSolver, runPreDragBackhoe3) {
 	assembly->runDraggingLog(std::string(TEST_DATA_PATH) + "/draggingBackhoe3.log");
 	EXPECT_TRUE(true);
 }
+TEST(OndselSolver, sliderrunDragStep) {
+	auto assembly = ASMTAssembly::assemblyFromFile(std::string(TEST_DATA_PATH) + "/sliderrunPreDrag.asmt");
+	assembly->runDraggingLog(std::string(TEST_DATA_PATH) + "/sliderdragging.log");
+	EXPECT_TRUE(true);
+}
 TEST(OndselSolver, pistonAllowZRotation) {
 	ASMTAssembly::runFile(std::string(TEST_DATA_PATH) + "/pistonAllowZRotation.asmt");
+	EXPECT_TRUE(true);
+}
+TEST(OndselSolver, slider_issue) {
+	ASMTAssembly::runFile(std::string(TEST_DATA_PATH) + "/slider_issue.asmt");
 	EXPECT_TRUE(true);
 }
 TEST(OndselSolver, RevRevJt) {

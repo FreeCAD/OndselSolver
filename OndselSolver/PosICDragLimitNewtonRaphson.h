@@ -8,21 +8,18 @@
 
 #pragma once
 
-#include "AnyPosICNewtonRaphson.h"
+#include "PosICDragNewtonRaphson.h"
 
 namespace MbD {
     class Part;
 
-    class PosICDragLimitNewtonRaphson : public AnyPosICNewtonRaphson
+    class PosICDragLimitNewtonRaphson : public PosICDragNewtonRaphson
     {
-        //Kinematics with under constrained system
+        //Dragging with limits of constrained or under constrained system
+        //Assume no redundant constraints
     public:
         static std::shared_ptr<PosICDragLimitNewtonRaphson> With();
         void preRun() override;
-        void initializeGlobally() override;
-        void setdragParts(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts);
         void run() override;
-
-        std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts;
     };
 }

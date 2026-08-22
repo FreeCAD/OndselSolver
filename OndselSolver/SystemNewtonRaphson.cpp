@@ -22,7 +22,7 @@ using namespace MbD;
 void SystemNewtonRaphson::initializeGlobally()
 {
 	this->assignEquationNumbers();
-	system->partsJointsMotionsLimitsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->useEquationNumbers(); });
+	system->partsJointsMotionsForcesTorquesDo([&](std::shared_ptr<Item> item) { item->useEquationNumbers(); });
 	this->createVectorsAndMatrices();
 	matrixSolver = this->matrixSolverClassNew();
 }
