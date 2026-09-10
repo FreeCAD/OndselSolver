@@ -106,3 +106,16 @@ void AtPointConstraintIqcJc::addToJointTorqueI(FColDsptr jointTorque)
 	auto c2Torque = aBOIp->timesFullColumn(lampGpE->minusFullColumn(fpAOIppEIrIpIeIp));
 	jointTorque->equalSelfPlusFullColumntimes(c2Torque, 0.5);
 }
+
+void AtPointConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusNumber(iG, iqXIminusOnePlusAxis, -1.0);
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void AtPointConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusNumber(iqXIminusOnePlusAxis, iG, -1.0);
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}

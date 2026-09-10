@@ -15,6 +15,8 @@ namespace MbD {
 	{
 		//pGpXJ pGpEJ ppGpXIpXJ ppGpXIpEJ ppGpEIpXJ ppGpEIpEJ ppGpXJpXJ ppGpXJpEJ ppGpEJpEJ iqXJ iqEJ 
 	public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
 		GearConstraintIqcJqc(EndFrmsptr frmi, EndFrmsptr frmj);
 
 		void calc_pGpEJ();

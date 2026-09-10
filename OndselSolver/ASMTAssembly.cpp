@@ -60,6 +60,7 @@
 #include "ASMTRevRevJoint.h"
 #include "ASMTLimit.h"
 #include "ASMTRotationLimit.h"
+#include "ASMTDistanceLimit.h"
 #include "ASMTTranslationLimit.h"
 #include "ExternalSystem.h"
 #if __GNUC__ >= 8
@@ -814,6 +815,9 @@ void MbD::ASMTAssembly::readLimits(std::vector<std::string>& lines)
         if (limitsLines[0] == "\t\t\tRotationLimit") {
             limit = ASMTRotationLimit::With();
         }
+        else if (limitsLines[0] == "\t\t\tDistanceLimit") {
+            limit = ASMTDistanceLimit::With();
+        }
         else if (limitsLines[0] == "\t\t\tTranslationLimit") {
             limit = ASMTTranslationLimit::With();
         }
@@ -1440,6 +1444,48 @@ void MbD::ASMTAssembly::restorePosRot()
     }
 }
 
+void MbD::ASMTAssembly::runDYNAMIC()
+{
+    if (!simulationParameters || !constantGravity || !parts || parts->empty())
+        throw std::invalid_argument("Dynamics requires simulation parameters, gravity and at least one body");
+    const auto& p = *simulationParameters;
+    auto positive = [](double x) { return std::isfinite(x) && x > 0; };
+    if (!std::isfinite(p.tstart) || !std::isfinite(p.tend) || !(p.tend > p.tstart)
+        || !positive(p.hout) || !positive(p.hmin) || !positive(p.hmax) || p.hmin > p.hmax
+        || p.tstart+p.hout == p.tstart || p.tstart+p.hmin == p.tstart
+        || !positive(p.corAbsTol) || !positive(p.corRelTol)
+        || !positive(p.intAbsTol) || !positive(p.intRelTol)
+        || !positive(p.errorTolPosKine) || !positive(p.errorTolAccKine)
+        || p.iterMaxDyn == 0 || p.orderMax == 0 || p.orderMax > 5)
+        throw std::invalid_argument("Invalid forward-dynamics interval, step sizes, tolerances or iteration/order limits");
+    const auto gravity = constantGravity->getg();
+    if (!gravity || gravity->size() != 3
+        || !std::all_of(gravity->begin(), gravity->end(), [](double x) { return std::isfinite(x); }))
+        throw std::invalid_argument("Gravity must have three finite components");
+    for (const auto& part : *parts) {
+        if (!part || !part->principalMassMarker)
+            throw std::invalid_argument("A dynamics body is missing its mass properties");
+        if (part->isFixed) continue;
+        const auto& mass = *part->principalMassMarker;
+        if (!positive(mass.mass) || !mass.momentOfInertias || mass.momentOfInertias->size() != 3
+            || !std::all_of(mass.momentOfInertias->begin(), mass.momentOfInertias->end(), positive))
+            throw std::invalid_argument("Moving bodies require finite, positive mass and principal inertias: " + part->name);
+    }
+    mbdSystem = std::make_shared<System>();
+    mbdSystem->externalSystem->asmtAssembly = this;
+    mbdSystem->dynamicEvents = dynamicEvents;
+    // Current placements and velocities are the inputs to each run. Replace
+    // output histories; callers can explicitly restore the input state first.
+    times->clear();
+    clearResults();
+    for (auto& part : *parts) part->clearResults();
+    for (auto& joint : *joints) joint->clearResults();
+    for (auto& motion : *motions) motion->clearResults();
+    for (auto& load : *forcesTorques) load->clearResults();
+    for (auto& limit : *limits) limit->clearResults();
+    mbdSystem->runDYNAMIC(mbdSystem);
+}
+
 void MbD::ASMTAssembly::runKINEMATIC()
 {
     mbdSystem = std::make_shared<System>();
@@ -1570,6 +1616,9 @@ void MbD::ASMTAssembly::updateFromMbD()
     for (auto& forceTorque : *forcesTorques) {
         forceTorque->updateFromMbD();
     }
+    for (auto& limit : *limits) {
+        limit->updateFromMbD();
+    }
 }
 
 void MbD::ASMTAssembly::compareResults(AnalysisType type)
@@ -1616,6 +1665,13 @@ void MbD::ASMTAssembly::addMotion(std::shared_ptr<ASMTMotion> motion)
     motions->push_back(motion);
     motion->owner = this;
     motion->initMarkers();
+}
+
+void ASMTAssembly::addForceTorque(std::shared_ptr<ASMTForceTorque> load)
+{
+    if (!load) throw std::invalid_argument("Cannot add a null load");
+    forcesTorques->push_back(load);
+    load->owner = this;
 }
 
 void MbD::ASMTAssembly::addLimit(std::shared_ptr<ASMTLimit> limit)

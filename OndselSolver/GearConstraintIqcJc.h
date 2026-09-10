@@ -15,6 +15,8 @@ namespace MbD {
 	{
 		//pGpXI pGpEI ppGpXIpXI ppGpXIpEI ppGpEIpEI iqXI iqEI 
 	public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
 		GearConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj);
 
 		void addToJointForceI(FColDsptr col) override;

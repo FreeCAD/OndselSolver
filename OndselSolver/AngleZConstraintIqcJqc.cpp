@@ -4,6 +4,24 @@
 
 using namespace MbD;
 
+namespace {
+void addOuterProduct(
+	SpMatDsptr mat,
+	size_t rowStart,
+	const FRowDsptr& row,
+	size_t columnStart,
+	const FRowDsptr& column,
+	double factor
+)
+{
+	for (size_t i = 0; i < row->size(); ++i) {
+		for (size_t j = 0; j < column->size(); ++j) {
+			mat->atijplusNumber(rowStart + i, columnStart + j, factor * row->at(i) * column->at(j));
+		}
+	}
+}
+}
+
 MbD::AngleZConstraintIqcJqc::AngleZConstraintIqcJqc(EndFrmsptr frmi, EndFrmsptr frmj) : AngleZConstraintIqcJc(frmi, frmj)
 {
 	pGpEJ = std::make_shared<FullRow<double>>(4);
@@ -85,6 +103,22 @@ void MbD::AngleZConstraintIqcJqc::fillVelICJacob(SpMatDsptr mat)
 	mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
 }
 
+void MbD::AngleZConstraintIqcJqc::fillpFpy(SpMatDsptr mat)
+{
+	AngleZConstraintIqcJc::fillpFpy(mat);
+	mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+	auto ppGpEIpEJlam = ppGpEIpEJ->times(lam);
+	mat->atijplusFullMatrix(iqEI, iqEJ, ppGpEIpEJlam);
+	mat->atijplusTransposeFullMatrix(iqEJ, iqEI, ppGpEIpEJlam);
+	mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+}
+
+void MbD::AngleZConstraintIqcJqc::fillpFpydot(SpMatDsptr mat)
+{
+	AngleZConstraintIqcJc::fillpFpydot(mat);
+	mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+}
+
 void MbD::AngleZConstraintIqcJqc::useEquationNumbers()
 {
 	AngleZConstraintIqcJc::useEquationNumbers();
@@ -95,4 +129,44 @@ void MbD::AngleZConstraintIqcJqc::useEquationNumbers()
 std::string MbD::AngleZConstraintIqcJqc::constraintSpec()
 {
 	return "AngleZConstraintIJ";
+}
+
+double MbD::AngleZConstraintIqcJqc::constraintVelocity() const
+{
+	auto frameJ = std::static_pointer_cast<EndFrameqc>(frmJ);
+	return AngleZConstraintIqcJc::constraintVelocity()
+		+ pGpEJ->timesFullColumn(frameJ->qEdot());
+}
+
+void MbD::AngleZConstraintIqcJqc::fillGeneralizedForce(FColDsptr col, double multiplier)
+{
+	AngleZConstraintIqcJc::fillGeneralizedForce(col, multiplier);
+	col->atiplusFullVectortimes(iqEJ, pGpEJ, multiplier);
+}
+
+void MbD::AngleZConstraintIqcJqc::fillGeneralizedForcePositionJacobian(
+	SpMatDsptr mat,
+	double multiplier,
+	double derivative
+)
+{
+	AngleZConstraintIqcJc::fillGeneralizedForcePositionJacobian(mat, multiplier, derivative);
+	auto crossHessian = ppGpEIpEJ->times(multiplier);
+	mat->atijplusFullMatrix(iqEI, iqEJ, crossHessian);
+	mat->atijplusTransposeFullMatrix(iqEJ, iqEI, crossHessian);
+	mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, multiplier);
+	addOuterProduct(mat, iqEI, pGpEI, iqEJ, pGpEJ, derivative);
+	addOuterProduct(mat, iqEJ, pGpEJ, iqEI, pGpEI, derivative);
+	addOuterProduct(mat, iqEJ, pGpEJ, iqEJ, pGpEJ, derivative);
+}
+
+void MbD::AngleZConstraintIqcJqc::fillGeneralizedForceVelocityJacobian(
+	SpMatDsptr mat,
+	double derivative
+)
+{
+	AngleZConstraintIqcJc::fillGeneralizedForceVelocityJacobian(mat, derivative);
+	addOuterProduct(mat, iqEI, pGpEI, iqEJ, pGpEJ, derivative);
+	addOuterProduct(mat, iqEJ, pGpEJ, iqEI, pGpEI, derivative);
+	addOuterProduct(mat, iqEJ, pGpEJ, iqEJ, pGpEJ, derivative);
 }

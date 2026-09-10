@@ -52,6 +52,24 @@ void MbD::AngleZConstraintIJ::initializeLocally()
 	thezIeJe->initializeLocally();
 }
 
+void MbD::AngleZConstraintIJ::postDynCorrectorIteration()
+{
+	thezIeJe->postDynCorrectorIteration();
+	Constraint::postDynCorrectorIteration();
+}
+
+void MbD::AngleZConstraintIJ::postDynOutput()
+{
+	thezIeJe->postDynOutput();
+	Constraint::postDynOutput();
+}
+
+void MbD::AngleZConstraintIJ::postDynPredictor()
+{
+	thezIeJe->postDynPredictor();
+	Constraint::postDynPredictor();
+}
+
 void MbD::AngleZConstraintIJ::postInput()
 {
 	assert(aConstant != std::numeric_limits<double>::min());
@@ -68,6 +86,12 @@ void MbD::AngleZConstraintIJ::preAccIC()
 {
 	thezIeJe->preAccIC();
 	ConstraintIJ::preAccIC();
+}
+
+void MbD::AngleZConstraintIJ::preDynOutput()
+{
+	thezIeJe->preDynOutput();
+	Constraint::preDynOutput();
 }
 
 void MbD::AngleZConstraintIJ::prePosIC()

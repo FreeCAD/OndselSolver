@@ -31,5 +31,10 @@ namespace MbD {
 		}
 
 		virtual ~DiscontinuityError() noexcept {}
+
+		const std::shared_ptr<std::vector<DiscontinuityType>>& types() const
+		{
+			return discontinuityTypes;
+		}
 	};
 }

@@ -76,6 +76,7 @@ namespace MbD {
         void updateFromInitiallyAssembledState() override;
         void updateFromInputState() override;
         void updateFromMbD() override;
+        void clearResults();
 		void compareResults(AnalysisType type) override;
 		void outputResults(AnalysisType type) override;
 		void addRefPoint(std::shared_ptr<ASMTRefPoint> refPoint);

@@ -3,6 +3,7 @@
 #include "BasicUserFunction.h"
 #include "Constant.h"
 #include "TranslationLimitIJ.h"
+#include "Units.h"
 
 using namespace MbD;
 
@@ -12,6 +13,10 @@ std::shared_ptr<ASMTTranslationLimit> MbD::ASMTTranslationLimit::With()
 	translationLimit->initialize();
 	return translationLimit;
 }
+
+double MbD::ASMTTranslationLimit::coordinateUnit(const Units& units) const { return units.length; }
+double MbD::ASMTTranslationLimit::stiffnessUnit(const Units& units) const { return units.length / units.force; }
+double MbD::ASMTTranslationLimit::dampingUnit(const Units& units) const { return units.velocity / units.force; }
 
 std::shared_ptr<ItemIJ> MbD::ASMTTranslationLimit::mbdClassNew()
 {

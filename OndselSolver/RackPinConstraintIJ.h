@@ -17,6 +17,10 @@ namespace MbD {
 	{
 		//xIeJeIe thezIeJe pitchRadius 
 	public:
+        void postDynPredictor() override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
         RackPinConstraintIJ(EndFrmsptr frmi, EndFrmsptr frmj);
 
         static std::shared_ptr<RackPinConstraintIJ> With(EndFrmsptr frmi, EndFrmsptr frmj);

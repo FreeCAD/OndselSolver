@@ -43,11 +43,19 @@ namespace MbD {
 		void runPosIC();
 		void runVelIC();
 		void runAccIC();
+		void releaseSeparatingLimits();
 		bool needToRedoPosIC();
 		void preCollision();
 		void runCollisionDerivativeIC();
 		void runBasicCollision();
 		void runBasicKinematic();
+        void runBasicDynamic();
+        double integrationRelativeTolerance() const { return intRelTol > 0 ? intRelTol : 1e-6; }
+        double integrationAbsoluteTolerance() const { return intAbsTol > 0 ? intAbsTol : 1e-6; }
+        double correctorRelativeTolerance() const { return corRelTol > 0 ? corRelTol : 1e-6; }
+        double correctorAbsoluteTolerance() const { return corAbsTol > 0 ? corAbsTol : 1e-6; }
+        void useDynTrialStepStats(std::shared_ptr<SolverStatistics>) {}
+        void useDAEStepStats(std::shared_ptr<SolverStatistics>) {}
 		void runPreDrag();
 		void runDragStep(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts);
 		void runQuasiKinematic();

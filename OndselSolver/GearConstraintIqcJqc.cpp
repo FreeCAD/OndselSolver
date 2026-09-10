@@ -167,3 +167,34 @@ std::string MbD::GearConstraintIqcJqc::constraintSpec()
 {
 	return "GearConstraintIJ";
 }
+
+void GearConstraintIqcJqc::fillpFpy(SpMatDsptr mat)
+{
+    GearConstraintIqcJc::fillpFpy(mat);
+    mat->atijplusFullRow(iG, iqXJ, pGpXJ);
+    mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+    auto ppGpXIpXJlam = ppGpXIpXJ->times(lam);
+    mat->atijplusFullMatrix(iqXI, iqXJ, ppGpXIpXJlam);
+    mat->atijplusTransposeFullMatrix(iqXJ, iqXI, ppGpXIpXJlam);
+    auto ppGpEIpXJlam = ppGpEIpXJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqXJ, ppGpEIpXJlam);
+    mat->atijplusTransposeFullMatrix(iqXJ, iqEI, ppGpEIpXJlam);
+    mat->atijplusFullMatrixtimes(iqXJ, iqXJ, ppGpXJpXJ, lam);
+    auto ppGpXIpEJlam = ppGpXIpEJ->times(lam);
+    mat->atijplusFullMatrix(iqXI, iqEJ, ppGpXIpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqXI, ppGpXIpEJlam);
+    auto ppGpEIpEJlam = ppGpEIpEJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqEJ, ppGpEIpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqEI, ppGpEIpEJlam);
+    auto ppGpXJpEJlam = ppGpXJpEJ->times(lam);
+    mat->atijplusFullMatrix(iqXJ, iqEJ, ppGpXJpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqXJ, ppGpXJpEJlam);
+    mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+}
+
+void GearConstraintIqcJqc::fillpFpydot(SpMatDsptr mat)
+{
+    GearConstraintIqcJc::fillpFpydot(mat);
+    mat->atijplusFullColumn(iqXJ, iG, pGpXJ->transpose());
+    mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+}

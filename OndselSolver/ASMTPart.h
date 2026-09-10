@@ -5,7 +5,7 @@
  *                                                                         *
  *   See LICENSE file for details about copyright.                         *
  ***************************************************************************/
- 
+
 #pragma once
 
 #include "ASMTSpatialContainer.h"
@@ -24,6 +24,8 @@ namespace MbD {
         void readPartSeries(std::vector<std::string>& lines);
         FColDsptr vOcmO() override;
         FColDsptr omeOpO() override;
+        void setCenterOfMassVelocity3D(double vx, double vy, double vz,
+                                       double wx, double wy, double wz);
         ASMTPart* part() override;
         void createMbD(std::shared_ptr<System> mbdSys, std::shared_ptr<Units> mbdUnits) override;
         void preMbDrunDragStep(std::shared_ptr<System> mbdSys, std::shared_ptr<Units> mbdUnits);

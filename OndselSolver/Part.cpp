@@ -163,9 +163,9 @@ FColDsptr Part::qXddot()
 
 void Part::qEddot(FColDsptr x)
 {
-	//ToDo: Should store EulerParametersDDot
-	//ToDo: Need alpOpO too
-	partFrame->qXddot = x;
+    //ToDo: Should store EulerParametersDDot
+    //ToDo: Need alpOpO too
+    partFrame->qEddot = x;
 }
 
 FColDsptr Part::qEddot()
@@ -584,7 +584,104 @@ void Part::postDynStep()
 	partFrame->postDynStep();
 }
 
-void MbD::Part::postAccIC()
+void Part::postAccIC()
 {
-	//calcpdot();
+    calcpdot();
+}
+
+void Part::fillpqsumu(FColDsptr col)
+{
+    col->atiputFullColumn(ipX, pX);
+    col->atiputFullColumn(ipE, pE);
+    partFrame->fillpqsumu(col);
+}
+
+void Part::fillpqsumudot(FColDsptr col)
+{
+    col->atiputFullColumn(ipX, pXdot);
+    col->atiputFullColumn(ipE, pEdot);
+    partFrame->fillpqsumudot(col);
+}
+
+void Part::calcpdot()
+{
+    pXdot = mX->timesFullColumn(partFrame->qXddot);
+    pEdot = mEdot->timesFullColumn(partFrame->qEdot)->plusFullColumn(mE->timesFullColumn(partFrame->qEddot));
+}
+
+void Part::setpqsumu(FColDsptr col)
+{
+    pX->equalFullColumnAt(col, ipX);
+    pE->equalFullColumnAt(col, ipE);
+    partFrame->setpqsumu(col);
+}
+
+void Part::setpqsumudot(FColDsptr col)
+{
+    pXdot->equalFullColumnAt(col, ipX);
+    pEdot->equalFullColumnAt(col, ipE);
+    partFrame->setpqsumudot(col);
+}
+
+void Part::setpqsumuddot(FColDsptr col)
+{
+    partFrame->setpqsumuddot(col);
+}
+
+void Part::postDynPredictor()
+{
+    partFrame->postDynPredictor();
+    Item::postDynPredictor();
+}
+
+void Part::fillDynError(FColDsptr col)
+{
+    partFrame->fillDynError(col);
+    //ToDo: Check for Units effect.
+    col->atiplusFullColumn(ipX, pX->minusFullColumn(mX->timesFullColumn(partFrame->qXdot)));
+    col->atiplusFullColumn(ipE, pE->minusFullColumn(mE->timesFullColumn(partFrame->qEdot)));
+    col->atiminusFullColumn(partFrame->iqX, pXdot);
+    col->atiminusFullColumn(partFrame->iqE, pEdot->minusFullColumn(pTpE));
+}
+
+void Part::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusDiagonalMatrix(ipX, ipX, std::make_shared<DiagonalMatrix<double>>(3, 1.0));
+    mat->atijplusDiagonalMatrix(ipE, ipE, std::make_shared<DiagonalMatrix<double>>(4, 1.0));
+    auto iqE = partFrame->iqE;
+    //ToDo: Check for Units effect.
+    mat->atijminusTransposeFullMatrix(ipE, iqE, ppTpEpEdot);
+    mat->atijplusFullMatrix(iqE, iqE, ppTpEpE);
+    partFrame->fillpFpy(mat);
+}
+
+void Part::fillpFpydot(SpMatDsptr mat)
+{
+        auto iqX = partFrame->iqX;
+        auto iqE = partFrame->iqE;
+        //ToDo: Check for Units effect.
+        mat->atijminusDiagonalMatrix(ipX, iqX, mX);
+        mat->atijminusFullMatrix(ipE, iqE, mE);
+        mat->atijminusDiagonalMatrix(iqX, ipX, std::make_shared<DiagonalMatrix<double>>(3, 1.0));
+        mat->atijminusDiagonalMatrix(iqE, ipE, std::make_shared<DiagonalMatrix<double>>(4, 1.0));
+        mat->atijplusFullMatrix(iqE, iqE, ppTpEpEdot);
+        partFrame->fillpFpydot(mat);
+}
+
+void Part::postDynCorrectorIteration()
+{
+    partFrame->postDynCorrectorIteration();
+    Item::postDynCorrectorIteration();
+}
+
+void Part::preDynOutput()
+{
+    partFrame->preDynOutput();
+    Item::preDynOutput();
+}
+
+void Part::postDynOutput()
+{
+    partFrame->postDynOutput();
+    Item::postDynOutput();
 }

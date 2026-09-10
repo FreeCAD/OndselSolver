@@ -20,6 +20,8 @@ namespace MbD {
 	{
 		//pGpE iqE 
 	public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
 		EulerConstraint();
 		EulerConstraint(const std::string& str);
 		void initialize() override;

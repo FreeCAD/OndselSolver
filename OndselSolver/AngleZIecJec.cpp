@@ -115,3 +115,31 @@ double MbD::AngleZIecJec::value()
 {
 	return thez;
 }
+
+void AngleZIecJec::postDynPredictor()
+{
+    aA00IeJe->postDynPredictor();
+    aA10IeJe->postDynPredictor();
+    KinematicIeJe::postDynPredictor();
+}
+
+void AngleZIecJec::postDynCorrectorIteration()
+{
+    aA00IeJe->postDynCorrectorIteration();
+    aA10IeJe->postDynCorrectorIteration();
+    KinematicIeJe::postDynCorrectorIteration();
+}
+
+void AngleZIecJec::preDynOutput()
+{
+    aA00IeJe->preDynOutput();
+    aA10IeJe->preDynOutput();
+    KinematicIeJe::preDynOutput();
+}
+
+void AngleZIecJec::postDynOutput()
+{
+    aA00IeJe->postDynOutput();
+    aA10IeJe->postDynOutput();
+    KinematicIeJe::postDynOutput();
+}

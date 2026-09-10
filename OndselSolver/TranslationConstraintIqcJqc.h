@@ -17,6 +17,16 @@ namespace MbD {
     {
         //pGpXJ pGpEJ ppGpEIpXJ ppGpEIpEJ ppGpEJpEJ iqXJ iqEJ 
     public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
+		double constraintVelocity() const override;
+		void fillGeneralizedForce(FColDsptr col, double multiplier) override;
+		void fillGeneralizedForcePositionJacobian(
+			SpMatDsptr mat,
+			double multiplier,
+			double derivative
+		) override;
+		void fillGeneralizedForceVelocityJacobian(SpMatDsptr mat, double derivative) override;
         TranslationConstraintIqcJqc(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi);
 
         void calcPostDynCorrectorIteration() override;

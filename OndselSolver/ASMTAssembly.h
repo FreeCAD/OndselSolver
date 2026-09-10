@@ -28,6 +28,7 @@ namespace MbD {
 	class SystemSolver;
 	class ASMTItemIJ;
     class ExternalSystem;
+    class DynamicEvents;
 
 	class ASMTAssembly : public ASMTSpatialContainer
 	{
@@ -101,7 +102,10 @@ namespace MbD {
 		void runDragStep(std::shared_ptr<std::vector<std::shared_ptr<ASMTPart>>> dragParts);
 		void runPostDrag();
 		void restorePosRot();
-		void runKINEMATIC();
+        void runKINEMATIC();
+        // Forward dynamics. Unlike the legacy kinematic wrapper, errors propagate.
+        void runDYNAMIC();
+        std::shared_ptr<DynamicEvents> dynamicEvents;
 		void initprincipalMassMarker();
 		std::shared_ptr<ASMTSpatialContainer> spatialContainerAt(std::shared_ptr<ASMTAssembly> self, std::string& longname) const;
 		std::shared_ptr<ASMTPart> partAt(const std::string& longname) const;
@@ -117,6 +121,7 @@ namespace MbD {
 		void outputResults(AnalysisType type) override;
 		void addPart(std::shared_ptr<ASMTPart> part);
 		void addJoint(std::shared_ptr<ASMTJoint> joint);
+        void addForceTorque(std::shared_ptr<ASMTForceTorque> load);
 		void addMotion(std::shared_ptr<ASMTMotion> motion);
 		void addLimit(std::shared_ptr<ASMTLimit> limit);
 		void setConstantGravity(std::shared_ptr<ASMTConstantGravity> constantGravity);

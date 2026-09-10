@@ -17,6 +17,18 @@ namespace MbD {
 	{
 		//
 	public:
+        void fillpqsumu(FColDsptr col) override;
+        void fillpqsumudot(FColDsptr col) override;
+        void setpqsumu(FColDsptr col) override;
+        void setpqsumudot(FColDsptr col) override;
+        void postDynPredictor() override;
+        void fillDynError(FColDsptr col) override;
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
+        void postDynCorrectorIteration() override;
+        void postDynOutput() override;
+        void preDynOutput() override;
+        void setpqsumuddot(FColDsptr col) override;
 		ConstraintSet();
 		ConstraintSet(const std::string& str);
 		void constraintsDo(const std::function <void(std::shared_ptr<Constraint>)>& f);

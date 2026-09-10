@@ -89,6 +89,30 @@ void System::runKINEMATIC(std::shared_ptr<System> self)
 	externalSystem->postMbDrun();
 }
 
+void System::runDYNAMIC(std::shared_ptr<System> self)
+{
+    externalSystem->preMbDrun(self);
+    while (true) {
+        initializeLocally();
+        initializeGlobally();
+        if (!hasChanged) break;
+    }
+    if (dynamicEvents && dynamicEvents->prepare) dynamicEvents->prepare();
+    partsJointsMotionsLimitsForcesTorquesDo([](std::shared_ptr<Item> item) { item->postInput(); });
+    externalSystem->outputFor(INPUT);
+    systemSolver->runAllIC();
+    systemSolver->releaseSeparatingLimits();
+    if (dynamicEvents && dynamicEvents->initialize(mbdTimeValue())) {
+        do {
+            systemSolver->runAllIC();
+            systemSolver->releaseSeparatingLimits();
+        } while (dynamicEvents->settle(mbdTimeValue()));
+    }
+    externalSystem->outputFor(INITIALCONDITION);
+    systemSolver->runBasicDynamic();
+    externalSystem->postMbDrun();
+}
+
 void System::initializeLocally()
 {
 	hasChanged = false;
@@ -191,6 +215,7 @@ std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> System::essentialConst
 {
 	auto essenConstraints = std::make_shared<std::vector<std::shared_ptr<Constraint>>>();
 	this->partsJointsMotionsDo([&](std::shared_ptr<Item> item) { item->fillEssenConstraints(essenConstraints); });
+	for (const auto& limit : *limits) limit->fillEssenConstraints(essenConstraints);
 	return essenConstraints;
 }
 
@@ -198,6 +223,7 @@ std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> System::displacementCo
 {
 	auto dispConstraints = std::make_shared<std::vector<std::shared_ptr<Constraint>>>();
 	this->jointsMotionsDo([&](std::shared_ptr<Joint> joint) { joint->fillDispConstraints(dispConstraints); });
+	for (const auto& limit : *limits) limit->fillDispConstraints(dispConstraints);
 	return dispConstraints;
 }
 
@@ -205,6 +231,7 @@ std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> System::perpendicularC
 {
 	auto perpenConstraints = std::make_shared<std::vector<std::shared_ptr<Constraint>>>();
 	this->jointsMotionsDo([&](std::shared_ptr<Joint> joint) { joint->fillPerpenConstraints(perpenConstraints); });
+	for (const auto& limit : *limits) limit->fillPerpenConstraints(perpenConstraints);
 	return perpenConstraints;
 }
 

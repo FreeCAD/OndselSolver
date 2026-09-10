@@ -4,6 +4,7 @@
 #include "BasicUserFunction.h"
 #include "Constant.h"
 #include "RotationLimitIJ.h"
+#include "Units.h"
 
 using namespace MbD;
 
@@ -13,6 +14,10 @@ std::shared_ptr<ASMTRotationLimit> MbD::ASMTRotationLimit::With()
 	rotationLimit->initialize();
 	return rotationLimit;
 }
+
+double MbD::ASMTRotationLimit::coordinateUnit(const Units& units) const { return units.angle; }
+double MbD::ASMTRotationLimit::stiffnessUnit(const Units& units) const { return units.angle / units.torque; }
+double MbD::ASMTRotationLimit::dampingUnit(const Units& units) const { return units.omega / units.torque; }
 
 std::shared_ptr<ItemIJ> MbD::ASMTRotationLimit::mbdClassNew()
 {

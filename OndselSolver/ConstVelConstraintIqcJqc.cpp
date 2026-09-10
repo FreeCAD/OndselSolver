@@ -135,3 +135,19 @@ std::string MbD::ConstVelConstraintIqcJqc::constraintSpec()
 {
 	return "ConstVelConstraintIJ";
 }
+
+void ConstVelConstraintIqcJqc::fillpFpy(SpMatDsptr mat)
+{
+    ConstVelConstraintIqcJc::fillpFpy(mat);
+    mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+    auto ppGpEIpEJlam = ppGpEIpEJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqEJ, ppGpEIpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqEI, ppGpEIpEJlam);
+    mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+}
+
+void ConstVelConstraintIqcJqc::fillpFpydot(SpMatDsptr mat)
+{
+    ConstVelConstraintIqcJc::fillpFpydot(mat);
+    mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+}

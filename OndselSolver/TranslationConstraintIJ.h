@@ -16,6 +16,10 @@ namespace MbD {
 	{
 		//riIeJeIe
 	public:
+        void postDynPredictor() override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
 		TranslationConstraintIJ(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi);
 
 		static std::shared_ptr<TranslationConstraintIJ> With(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi);

@@ -17,6 +17,8 @@ namespace MbD {
     {
         //pGpEJ ppGpEJpEJ iqXJminusOnePlusAxis iqEJ 
     public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
         AtPointConstraintIqcJqc(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi);
 
         void calcPostDynCorrectorIteration() override;

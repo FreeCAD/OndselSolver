@@ -10,12 +10,14 @@
 
 #include <string>
 #include "Numeric.h"
+#include "SolverStatistics.h"
 
 namespace MbD {
 	class Solver
 	{
 		//statistics
 	public:
+        std::shared_ptr<SolverStatistics> statistics = SolverStatistics::With();
 		void noop();
 		virtual ~Solver() {}
 		virtual void initialize();

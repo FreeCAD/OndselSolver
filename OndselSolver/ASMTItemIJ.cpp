@@ -40,6 +40,13 @@ void MbD::ASMTItemIJ::setMarkerI(const std::string& mkrI)
 	markerI = mkrI;
 }
 
+void ASMTItemIJ::clearResults()
+{
+    for (auto row : {fxs, fys, fzs, txs, tys, tzs}) {
+        if (row) row->clear();
+    }
+}
+
 void MbD::ASMTItemIJ::setMarkerJ(const std::string& mkrJ)
 {
 	markerJ = mkrJ;

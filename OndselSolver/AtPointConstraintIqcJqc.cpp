@@ -93,3 +93,18 @@ void AtPointConstraintIqcJqc::fillAccICIterError(FColDsptr col)
 	sum += qEdotJ->transposeTimesFullColumn(ppGpEJpEJ->timesFullColumn(qEdotJ));
 	col->atiplusNumber(iG, sum);
 }
+
+void AtPointConstraintIqcJqc::fillpFpy(SpMatDsptr mat)
+{
+    AtPointConstraintIqcJc::fillpFpy(mat);
+    mat->atijplusNumber(iG, iqXJminusOnePlusAxis, 1.0);
+    mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+    mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+}
+
+void AtPointConstraintIqcJqc::fillpFpydot(SpMatDsptr mat)
+{
+    AtPointConstraintIqcJc::fillpFpydot(mat);
+    mat->atijplusNumber(iqXJminusOnePlusAxis, iG, 1.0);
+    mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+}

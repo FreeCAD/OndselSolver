@@ -23,16 +23,17 @@ AbsConstraint::AbsConstraint(size_t i)
 void AbsConstraint::calcPostDynCorrectorIteration()
 {
     if (axis < 3) {
-        aG = static_cast<PartFrame*>(owner)->qX->at(axis);
+        aG = static_cast<PartFrame*>(owner)->qX->at(axis) - aConstant;
     }
     else {
-        aG = static_cast<PartFrame*>(owner)->qE->at(axis - 3);
+        aG = static_cast<PartFrame*>(owner)->qE->at(axis - 3) - aConstant;
     }
 }
 
 void AbsConstraint::useEquationNumbers()
 {
-    iqXminusOnePlusAxis = static_cast<PartFrame*>(owner)->iqX + axis;
+    const auto frame = static_cast<PartFrame*>(owner);
+    iqXminusOnePlusAxis = axis < 3 ? frame->iqX + axis : frame->iqE + axis - 3;
 }
 
 std::string MbD::AbsConstraint::constraintSpec()
@@ -74,4 +75,14 @@ void AbsConstraint::fillAccICIterError(FColDsptr col)
             sum = partFrame->qEddot->at(axis - 3);
         }
         col->atiplusNumber(iG, sum);
+}
+
+void AbsConstraint::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusNumber(iG, iqXminusOnePlusAxis, 1.0);
+}
+
+void AbsConstraint::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusNumber(iqXminusOnePlusAxis, iG, 1.0);
 }

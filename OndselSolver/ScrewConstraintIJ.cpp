@@ -112,3 +112,31 @@ void MbD::ScrewConstraintIJ::simUpdateAll()
 	thezIeJe->simUpdateAll();
 	ConstraintIJ::simUpdateAll();
 }
+
+void ScrewConstraintIJ::postDynPredictor()
+{
+    zIeJeIe->postDynPredictor();
+    thezIeJe->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void ScrewConstraintIJ::postDynCorrectorIteration()
+{
+    zIeJeIe->postDynCorrectorIteration();
+    thezIeJe->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void ScrewConstraintIJ::preDynOutput()
+{
+    zIeJeIe->preDynOutput();
+    thezIeJe->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void ScrewConstraintIJ::postDynOutput()
+{
+    zIeJeIe->postDynOutput();
+    thezIeJe->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

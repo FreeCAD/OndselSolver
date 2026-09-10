@@ -4,6 +4,24 @@
 
 using namespace MbD;
 
+namespace {
+void addOuterProduct(
+	SpMatDsptr mat,
+	size_t rowStart,
+	const FRowDsptr& row,
+	size_t columnStart,
+	const FRowDsptr& column,
+	double factor
+)
+{
+	for (size_t i = 0; i < row->size(); ++i) {
+		for (size_t j = 0; j < column->size(); ++j) {
+			mat->atijplusNumber(rowStart + i, columnStart + j, factor * row->at(i) * column->at(j));
+		}
+	}
+}
+}
+
 MbD::AngleZConstraintIqcJc::AngleZConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj) : AngleZConstraintIJ(frmi, frmj)
 {
 	pGpEI = std::make_shared<FullRow<double>>(4);
@@ -79,8 +97,48 @@ void MbD::AngleZConstraintIqcJc::fillVelICJacob(SpMatDsptr mat)
 	mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
 }
 
+void MbD::AngleZConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+	mat->atijplusFullRow(iG, iqEI, pGpEI);
+	mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void MbD::AngleZConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+	mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}
+
 void MbD::AngleZConstraintIqcJc::useEquationNumbers()
 {
 	auto frmIeqc = std::static_pointer_cast<EndFrameqc>(frmI);
 	iqEI = frmIeqc->iqE();
+}
+
+double MbD::AngleZConstraintIqcJc::constraintVelocity() const
+{
+	auto frameI = std::static_pointer_cast<EndFrameqc>(frmI);
+	return pGpEI->timesFullColumn(frameI->qEdot());
+}
+
+void MbD::AngleZConstraintIqcJc::fillGeneralizedForce(FColDsptr col, double multiplier)
+{
+	col->atiplusFullVectortimes(iqEI, pGpEI, multiplier);
+}
+
+void MbD::AngleZConstraintIqcJc::fillGeneralizedForcePositionJacobian(
+	SpMatDsptr mat,
+	double multiplier,
+	double derivative
+)
+{
+	mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, multiplier);
+	addOuterProduct(mat, iqEI, pGpEI, iqEI, pGpEI, derivative);
+}
+
+void MbD::AngleZConstraintIqcJc::fillGeneralizedForceVelocityJacobian(
+	SpMatDsptr mat,
+	double derivative
+)
+{
+	addOuterProduct(mat, iqEI, pGpEI, iqEI, pGpEI, derivative);
 }

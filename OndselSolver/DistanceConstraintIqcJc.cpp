@@ -13,6 +13,29 @@
 
 using namespace MbD;
 
+namespace
+{
+void addOuterProduct(
+    SpMatDsptr mat,
+    size_t rowStart,
+    const FRowDsptr& row,
+    size_t columnStart,
+    const FRowDsptr& column,
+    double factor
+)
+{
+    for (size_t i = 0; i < row->size(); ++i) {
+        for (size_t j = 0; j < column->size(); ++j) {
+            mat->atijplusNumber(
+                rowStart + i,
+                columnStart + j,
+                factor * row->at(i) * column->at(j)
+            );
+        }
+    }
+}
+}  // namespace
+
 MbD::DistanceConstraintIqcJc::DistanceConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj) : DistanceConstraintIJ(frmi, frmj)
 {
 }
@@ -109,4 +132,81 @@ void MbD::DistanceConstraintIqcJc::useEquationNumbers()
 	auto frmIeqc = std::static_pointer_cast<EndFrameqc>(frmI);
 	iqXI = frmIeqc->iqX();
 	iqEI = frmIeqc->iqE();
+}
+
+void DistanceConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusFullRow(iG, iqXI, pGpXI);
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    mat->atijplusFullMatrixtimes(iqXI, iqXI, ppGpXIpXI, lam);
+    auto ppGpXIpEIlam = ppGpXIpEI->times(lam);
+    mat->atijplusFullMatrix(iqXI, iqEI, ppGpXIpEIlam);
+    mat->atijplusTransposeFullMatrix(iqEI, iqXI, ppGpXIpEIlam);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void DistanceConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqXI, iG, pGpXI->transpose());
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}
+
+double DistanceConstraintIqcJc::constraintVelocity() const
+{
+    auto frameI = std::static_pointer_cast<EndFrameqc>(frmI);
+    return pGpXI->timesFullColumn(frameI->qXdot())
+        + pGpEI->timesFullColumn(frameI->qEdot());
+}
+
+void DistanceConstraintIqcJc::fillGeneralizedForce(FColDsptr col, double multiplier)
+{
+    col->atiplusFullVectortimes(iqXI, pGpXI, multiplier);
+    col->atiplusFullVectortimes(iqEI, pGpEI, multiplier);
+}
+
+void DistanceConstraintIqcJc::fillGeneralizedForcePositionJacobian(
+    SpMatDsptr mat,
+    double multiplier,
+    double derivative
+)
+{
+    mat->atijplusFullMatrixtimes(iqXI, iqXI, ppGpXIpXI, multiplier);
+    auto crossHessian = ppGpXIpEI->times(multiplier);
+    mat->atijplusFullMatrix(iqXI, iqEI, crossHessian);
+    mat->atijplusTransposeFullMatrix(iqEI, iqXI, crossHessian);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, multiplier);
+
+    const std::pair<size_t, FRowDsptr> segments[] = {{iqXI, pGpXI}, {iqEI, pGpEI}};
+    for (const auto& row : segments) {
+        for (const auto& column : segments) {
+            addOuterProduct(
+                mat,
+                row.first,
+                row.second,
+                column.first,
+                column.second,
+                derivative
+            );
+        }
+    }
+}
+
+void DistanceConstraintIqcJc::fillGeneralizedForceVelocityJacobian(
+    SpMatDsptr mat,
+    double derivative
+)
+{
+    const std::pair<size_t, FRowDsptr> segments[] = {{iqXI, pGpXI}, {iqEI, pGpEI}};
+    for (const auto& row : segments) {
+        for (const auto& column : segments) {
+            addOuterProduct(
+                mat,
+                row.first,
+                row.second,
+                column.first,
+                column.second,
+                derivative
+            );
+        }
+    }
 }

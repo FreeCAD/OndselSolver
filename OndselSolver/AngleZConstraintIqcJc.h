@@ -29,6 +29,16 @@ namespace MbD {
 		void fillPosICJacob(SpMatDsptr mat) override;
 		void fillPosKineJacob(SpMatDsptr mat) override;
 		void fillVelICJacob(SpMatDsptr mat) override;
+		void fillpFpy(SpMatDsptr mat) override;
+		void fillpFpydot(SpMatDsptr mat) override;
+		double constraintVelocity() const override;
+		void fillGeneralizedForce(FColDsptr col, double multiplier) override;
+		void fillGeneralizedForcePositionJacobian(
+			SpMatDsptr mat,
+			double multiplier,
+			double derivative
+		) override;
+		void fillGeneralizedForceVelocityJacobian(SpMatDsptr mat, double derivative) override;
 		void useEquationNumbers() override;
 
 		FRowDsptr pGpEI;

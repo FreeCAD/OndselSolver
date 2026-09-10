@@ -25,9 +25,13 @@ namespace MbD {
         void initialize() override;
         void initializeGlobally() override;
         void initializeLocally() override;
+        void postDynCorrectorIteration() override;
+        void postDynOutput() override;
+        void postDynPredictor() override;
         void postInput() override;
         void postPosICIteration() override;
         void preAccIC() override;
+        void preDynOutput() override;
         void prePosIC() override;
         void preVelIC() override;
         void simUpdateAll() override;

@@ -16,6 +16,8 @@ namespace MbD {
 	{
 		//axis iqXminusOnePlusAxis 
 	public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
 		//AbsConstraint();
 		//AbsConstraint(const std::string& str);
 		AbsConstraint(size_t axis);

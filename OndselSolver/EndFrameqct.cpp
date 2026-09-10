@@ -366,3 +366,27 @@ bool MbD::EndFrameqct::isEndFrameqc()
 {
 	return false;
 }
+
+void EndFrameqct::postDynPredictor()
+{
+    time = root()->mbdTimeValue();
+    evalrmem();
+    evalAme();
+    EndFrameqc::postDynPredictor();
+}
+
+void EndFrameqct::preDynOutput()
+{
+    time = root()->mbdTimeValue();
+    evalrmem();
+    evalAme();
+    EndFrameqc::preDynOutput();
+}
+
+void EndFrameqct::postDynOutput()
+{
+    time = root()->mbdTimeValue();
+    evalrmem();
+    evalAme();
+    EndFrameqc::postDynOutput();
+}

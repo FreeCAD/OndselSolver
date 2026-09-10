@@ -88,3 +88,20 @@ std::string MbD::EulerConstraint::constraintSpec()
 {
 	return "EulerConstraint";
 }
+
+void EulerConstraint::fillpFpy(SpMatDsptr mat)
+{
+    //"ppGpEpE is a diag(2,2,2,2)."
+    mat->atijplusFullRow(iG, iqE, pGpE);
+    auto twolam = 2.0 * lam;
+    for (size_t i = 0; i < 4; i++)
+    {
+        auto ii = iqE + i;
+        mat->atijplusNumber(ii, ii, twolam);
+    }
+}
+
+void EulerConstraint::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqE, iG, pGpE->transpose());
+}

@@ -102,3 +102,31 @@ void MbD::GearConstraintIJ::simUpdateAll()
 	orbitJeIe->simUpdateAll();
 	ConstraintIJ::simUpdateAll();
 }
+
+void GearConstraintIJ::postDynPredictor()
+{
+    orbitIeJe->postDynPredictor();
+    orbitJeIe->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void GearConstraintIJ::postDynCorrectorIteration()
+{
+    orbitIeJe->postDynCorrectorIteration();
+    orbitJeIe->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void GearConstraintIJ::preDynOutput()
+{
+    orbitIeJe->preDynOutput();
+    orbitJeIe->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void GearConstraintIJ::postDynOutput()
+{
+    orbitIeJe->postDynOutput();
+    orbitJeIe->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

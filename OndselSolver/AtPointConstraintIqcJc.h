@@ -17,6 +17,8 @@ namespace MbD {
 	{
 		//pGpEI ppGpEIpEI iqXIminusOnePlusAxis iqEI 
 	public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
 		AtPointConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi);
 
 		void addToJointForceI(FColDsptr col) override;

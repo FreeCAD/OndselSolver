@@ -41,6 +41,7 @@ set(ONDSELSOLVER_SRC
         ASMTConstantGravity.cpp
         ASMTConstantVelocityJoint.cpp
         ASMTConstraintSet.cpp
+        ASMTDistanceLimit.cpp
         ASMTCylindricalJoint.cpp
         ASMTCylSphJoint.cpp
         ASMTExtrusion.cpp
@@ -141,6 +142,7 @@ set(ONDSELSOLVER_SRC
         DistanceConstraintIqcJc.cpp
         DistanceConstraintIqcJqc.cpp
         DistanceConstraintIqctJqc.cpp
+        DistanceLimitIJ.cpp
         DistancexyConstraintIJ.cpp
         DistancexyConstraintIqcJc.cpp
         DistancexyConstraintIqcJqc.cpp
@@ -353,6 +355,7 @@ set(ONDSELSOLVER_HEADERS
         ASMTConstantGravity.h
         ASMTConstantVelocityJoint.h
         ASMTConstraintSet.h
+        ASMTDistanceLimit.h
         ASMTCylindricalJoint.h
         ASMTCylSphJoint.h
         ASMTExtrusion.h
@@ -458,6 +461,7 @@ set(ONDSELSOLVER_HEADERS
         DistanceConstraintIqcJc.h
         DistanceConstraintIqcJqc.h
         DistanceConstraintIqctJqc.h
+        DistanceLimitIJ.h
         DistancexyConstraintIJ.h
         DistancexyConstraintIqcJc.h
         DistancexyConstraintIqcJqc.h
@@ -635,6 +639,32 @@ set(ONDSELSOLVER_HEADERS
         VelSolver.h
         ZRotation.h
         ZTranslation.h
+)
+
+list(APPEND ONDSELSOLVER_SRC
+    AppliedForceTorque.cpp
+    DynIntegrator.cpp
+    DAEIntegrator.cpp
+    BasicDAEIntegrator.cpp
+    StartingBasicDAEIntegrator.cpp
+    NormalBasicDAEIntegrator.cpp
+    DAECorrector.cpp
+    StableStartingBDF.cpp
+    Extrapolator.cpp
+    SolverStatistics.cpp
+)
+list(APPEND ONDSELSOLVER_HEADERS
+    AppliedForceTorque.h
+    DynIntegrator.h
+    DAEIntegrator.h
+    BasicDAEIntegrator.h
+    DynamicEvents.h
+    StartingBasicDAEIntegrator.h
+    NormalBasicDAEIntegrator.h
+    DAECorrector.h
+    StableStartingBDF.h
+    Extrapolator.h
+    SolverStatistics.h
 )
 
 target_sources(OndselSolver PRIVATE

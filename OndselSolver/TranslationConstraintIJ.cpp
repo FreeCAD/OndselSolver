@@ -91,3 +91,27 @@ void TranslationConstraintIJ::preAccIC()
     riIeJeIe->preAccIC();
     Constraint::preAccIC();
 }
+
+void TranslationConstraintIJ::postDynPredictor()
+{
+    riIeJeIe->postDynPredictor();
+    Constraint::postDynPredictor();
+}
+
+void TranslationConstraintIJ::postDynCorrectorIteration()
+{
+    riIeJeIe->postDynCorrectorIteration();
+    Constraint::postDynCorrectorIteration();
+}
+
+void TranslationConstraintIJ::preDynOutput()
+{
+    riIeJeIe->preDynOutput();
+    Constraint::preDynOutput();
+}
+
+void TranslationConstraintIJ::postDynOutput()
+{
+    riIeJeIe->postDynOutput();
+    Constraint::postDynOutput();
+}

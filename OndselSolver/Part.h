@@ -22,6 +22,19 @@ namespace MbD {
 	{
 		//ToDo: ipX ipE m aJ partFrame pX pXdot pE pEdot mX mE mEdot pTpE ppTpEpE ppTpEpEdot 
 	public:
+        void fillpqsumu(FColDsptr col) override;
+        void fillpqsumudot(FColDsptr col) override;
+        void calcpdot();
+        void setpqsumu(FColDsptr col) override;
+        void setpqsumudot(FColDsptr col) override;
+        void setpqsumuddot(FColDsptr col) override;
+        void postDynPredictor() override;
+        void fillDynError(FColDsptr col) override;
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
 		Part();
 		Part(const std::string& str);
 		System* root() override;

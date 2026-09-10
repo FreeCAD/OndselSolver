@@ -17,6 +17,9 @@ namespace MbD {
 	{
 		//iStep order taylorMatrix operatorMatrix time timeNodes 
 	public:
+        void formDegenerateTaylorRow(size_t i) const;
+        FColDsptr valueWith(std::shared_ptr<std::vector<FColDsptr>> series);
+        FColDsptr derivativewith(size_t deriv, std::shared_ptr<std::vector<FColDsptr>> series) const;
 		virtual ~DifferenceOperator() {}
 		void calcOperatorMatrix();
 		virtual void initialize();

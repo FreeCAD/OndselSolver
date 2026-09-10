@@ -512,11 +512,26 @@ void PartFrame::postDynStep()
 
 void PartFrame::asFixed()
 {
-	for (size_t i = 0; i < 6; i++) {
-		auto con = CREATE<AbsConstraint>::With(i);
-		con->owner = this;
-		aGabs->push_back(con);
-	}
+    // Ground at the supplied pose, not at zero coordinates/identity rotation.
+    // The Euler normalization constraint supplies the fourth quaternion equation.
+    // Leave the largest component unconstrained so that this remains full rank
+    // at half-turns as well as near the identity orientation.
+    size_t dependent = 0;
+    for (size_t i = 1; i < 4; ++i) {
+        if (std::abs(qE->at(i)) > std::abs(qE->at(dependent))) {
+            dependent = i;
+        }
+    }
+    aGabs->clear();
+    for (size_t i = 0; i < 7; ++i) {
+        if (i == 3 + dependent) {
+            continue;
+        }
+        auto con = CREATE<AbsConstraint>::With(i);
+        con->owner = this;
+        con->setConstant(i < 3 ? qX->at(i) : qE->at(i - 3));
+        aGabs->push_back(con);
+    }
 }
 
 void PartFrame::postInput()
@@ -535,4 +550,103 @@ void PartFrame::calcPostDynCorrectorIteration()
 	qE->calcpApE();
 	qEdot->calcAdotBdotCdot();
 	qEdot->calcpAdotpE();
+}
+
+void PartFrame::fillpqsumu(FColDsptr col)
+{
+    //"Fill q, s and lam into col."
+    col->atiputFullColumn(iqX, qX);
+    col->atiputFullColumn(iqE, qE);
+    markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->fillpqsumu(col); });
+    aGeu->fillpqsumu(col);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->fillpqsumu(col); });
+}
+
+void PartFrame::fillpqsumudot(FColDsptr col)
+{
+    col->atiputFullColumn(iqX, qXdot);
+    col->atiputFullColumn(iqE, qEdot);
+    markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->fillpqsumudot(col); });
+    aGeu->fillpqsumudot(col);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->fillpqsumudot(col); });
+}
+
+void PartFrame::setpqsumu(FColDsptr col)
+{
+    qX->equalFullColumnAt(col, iqX);
+    qE->equalFullColumnAt(col, iqE);
+    markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->setpqsumu(col); });
+    aGeu->setpqsumu(col);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->setpqsumu(col); });
+}
+
+void PartFrame::setpqsumudot(FColDsptr col)
+{
+    qXdot->equalFullColumnAt(col, iqX);
+    qEdot->equalFullColumnAt(col, iqE);
+    markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->setpqsumudot(col); });
+    aGeu->setpqsumudot(col);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->setpqsumudot(col); });
+}
+
+void PartFrame::setpqsumuddot(FColDsptr col)
+{
+    qXddot->equalFullColumnAt(col, iqX);
+    qEddot->equalFullColumnAt(col, iqE);
+    markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->setpqsumuddot(col); });
+    aGeu->setpqsumuddot(col);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->setpqsumuddot(col); });
+}
+
+void PartFrame::postDynPredictor()
+{
+    CartesianFrame::postDynPredictor();
+    markerFramesDo([](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->postDynPredictor(); });
+    aGeu->postDynPredictor();
+    aGabsDo([](std::shared_ptr<Constraint> aGab) { aGab->postDynPredictor(); });
+}
+
+void PartFrame::fillDynError(FColDsptr col)
+{
+    markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->fillDynError(col); });
+    aGeu->fillDynError(col);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->fillDynError(col); });
+}
+
+void PartFrame::fillpFpy(SpMatDsptr mat)
+{
+    //markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->fillpFpy(mat); });
+    aGeu->fillpFpy(mat);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->fillpFpy(mat); });
+}
+
+void PartFrame::fillpFpydot(SpMatDsptr mat)
+{
+    //markerFramesDo([&](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->fillpFpydot(mat); });
+    aGeu->fillpFpydot(mat);
+    aGabsDo([&](std::shared_ptr<Constraint> con) { con->fillpFpydot(mat); });
+}
+
+void PartFrame::postDynCorrectorIteration()
+{
+    CartesianFrame::postDynCorrectorIteration();
+    markerFramesDo([](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->postDynCorrectorIteration(); });
+    aGeu->postDynCorrectorIteration();
+    aGabsDo([](std::shared_ptr<Constraint> aGab) { aGab->postDynCorrectorIteration(); });
+}
+
+void PartFrame::preDynOutput()
+{
+    CartesianFrame::preDynOutput();
+    markerFramesDo([](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->preDynOutput(); });
+    aGeu->preDynOutput();
+    aGabsDo([](std::shared_ptr<Constraint> aGab) { aGab->preDynOutput(); });
+}
+
+void PartFrame::postDynOutput()
+{
+    CartesianFrame::postDynOutput();
+    markerFramesDo([](std::shared_ptr<MarkerFrame> markerFrame) { markerFrame->postDynOutput(); });
+    aGeu->postDynOutput();
+    aGabsDo([](std::shared_ptr<Constraint> aGab) { aGab->postDynOutput(); });
 }

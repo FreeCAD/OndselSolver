@@ -15,6 +15,8 @@ namespace MbD {
 	{
 		//pGpXJ pGpEJ ppGpXIpXJ ppGpEIpXJ ppGpXJpXJ ppGpXIpEJ ppGpEIpEJ ppGpXJpEJ ppGpEJpEJ iqXJ iqEJ 
 	public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
 		DistancexyConstraintIqcJqc(EndFrmsptr frmi, EndFrmsptr frmj);
 
 		void calc_pGpXJ();

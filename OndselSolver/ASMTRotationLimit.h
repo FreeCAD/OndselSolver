@@ -18,6 +18,9 @@ namespace MbD {
         static std::shared_ptr<ASMTRotationLimit> With();
         std::shared_ptr<ItemIJ> mbdClassNew() override;
         void storeOnLevel(std::ofstream& os, size_t level) override;
+		double coordinateUnit(const Units& units) const override;
+		double stiffnessUnit(const Units& units) const override;
+		double dampingUnit(const Units& units) const override;
 
     };
 }

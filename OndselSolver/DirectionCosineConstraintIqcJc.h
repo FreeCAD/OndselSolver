@@ -17,6 +17,8 @@ namespace MbD {
 	{
 		//pGpEI ppGpEIpEI iqEI 
 	public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
 		DirectionCosineConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi, size_t axisj);
 
 		void addToJointTorqueI(FColDsptr col) override;
