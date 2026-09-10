@@ -88,5 +88,9 @@ namespace MbD {
 
 		std::shared_ptr<Time> time;
         std::shared_ptr<DynamicEvents> dynamicEvents;
+        // Kinematics ignores stops; forward dynamics must include active stops
+        // in its initial-condition and integration equations.
+        enum class RunMode { Dragging, Kinematic, Dynamic };
+        RunMode runMode = RunMode::Dragging;
 	};
 }

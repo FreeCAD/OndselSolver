@@ -1616,8 +1616,10 @@ void MbD::ASMTAssembly::updateFromMbD()
     for (auto& forceTorque : *forcesTorques) {
         forceTorque->updateFromMbD();
     }
-    for (auto& limit : *limits) {
-        limit->updateFromMbD();
+    if (mbdSystem->runMode != System::RunMode::Kinematic) {
+        for (auto& limit : *limits) {
+            limit->updateFromMbD();
+        }
     }
 }
 

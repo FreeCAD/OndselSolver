@@ -415,6 +415,32 @@ TEST(Dynamics, RotationalJointLimitsStopInitialVelocity)
     EXPECT_NEAR(b->omezs->back(), 0, 1e-7);
 }
 
+TEST(Dynamics, KinematicMotionIgnoresStopsWhileDynamicsEnforcesThem)
+{
+    for (bool dynamic : {false, true}) {
+        SCOPED_TRACE(dynamic);
+        auto a = model(0.1, 1e-8, 0.01);
+        auto b = body(a, "Rotor", 1, 0.1);
+        b->setOmega3D(0, 0, 10);
+        auto ground = marker(a, "Pivot");
+        auto moving = marker(b, "Pivot");
+        auto hinge = joint<ASMTRevoluteJoint>(a, "Hinge", ground, moving);
+        if (!dynamic) drive(a, hinge, "10*time");
+        auto limit = ASMTRotationLimit::With();
+        limit->setName("UpperStop");
+        limit->setMarkerI(ground->fullName(""));
+        limit->setMarkerJ(moving->fullName(""));
+        limit->settype("=<");
+        limit->setlimit("0.5");
+        limit->settol("1e-9");
+        a->addLimit(limit);
+        run(a, dynamic);
+        ASSERT_NO_FATAL_FAILURE(complete(a, b));
+        EXPECT_NEAR(b->bryzs->back(), dynamic ? 0.5 : 1.0, 1e-7);
+        EXPECT_NEAR(b->omezs->back(), dynamic ? 0.0 : 10.0, 1e-7);
+    }
+}
+
 TEST(Dynamics, HardStopsReleaseButDoNotPull)
 {
     for (bool rotational : {false, true}) {

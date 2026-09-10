@@ -322,7 +322,8 @@ void SystemSolver::runAccICKine()
 
 void SystemSolver::partsJointsMotionsDo(const std::function<void(std::shared_ptr<Item>)>& f)
 {
-	system->partsJointsMotionsDo(f);
+	if (system->runMode == System::RunMode::Dynamic) system->partsJointsMotionsLimitsDo(f);
+	else system->partsJointsMotionsDo(f);
 }
 
 void SystemSolver::logString(const std::string& str)
@@ -377,7 +378,8 @@ void SystemSolver::postNewtonRaphson()
 
 void SystemSolver::partsJointsMotionsForcesTorquesDo(const std::function<void(std::shared_ptr<Item>)>& f)
 {
-	system->partsJointsMotionsForcesTorquesDo(f);
+	if (system->runMode == System::RunMode::Dynamic) system->partsJointsMotionsLimitsForcesTorquesDo(f);
+	else system->partsJointsMotionsForcesTorquesDo(f);
 }
 
 void MbD::SystemSolver::partsJointsMotionsLimitsDo(const std::function<void(std::shared_ptr<Item>)>& f)
