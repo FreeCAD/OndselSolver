@@ -1,3 +1,4 @@
+include(GoogleTest)
 find_package(GTest QUIET)
 if(NOT GTest_FOUND)
     include(FetchContent)
@@ -59,13 +60,11 @@ target_sources(test_run
 if(GTest_FOUND)
     target_link_libraries(test_run
         GTest::gtest_main
-        GTest::gmock_main
         OndselSolver
     )
 else()
     target_link_libraries(test_run
         gtest_main
-        gmock_main
         ${Google_Tests_LIBS}
         OndselSolver
     )
@@ -76,3 +75,21 @@ endif()
 set(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
 
 gtest_discover_tests(test_run)
+
+add_executable(test_dynamics TestDynamics.cpp)
+target_include_directories(test_dynamics PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../OndselSolver)
+target_link_libraries(test_dynamics PRIVATE GTest::gtest_main OndselSolver)
+gtest_discover_tests(test_dynamics DISCOVERY_MODE PRE_TEST PROPERTIES TIMEOUT 120 LABELS dynamics)
+
+# With a DLL-based Google Test installation, allow both test executables to run
+# without requiring users to modify PATH. No-op for a static installation.
+if(WIN32 AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.21)
+    foreach(test_target IN ITEMS test_run test_dynamics)
+        add_custom_command(TARGET ${test_target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND}
+                "-DTEST_RUNTIME_DLLS=$<TARGET_RUNTIME_DLLS:${test_target}>"
+                "-DTEST_RUNTIME_DESTINATION=$<TARGET_FILE_DIR:${test_target}>"
+                -P "${CMAKE_CURRENT_SOURCE_DIR}/CopyRuntimeDlls.cmake"
+            VERBATIM)
+    endforeach()
+endif()
