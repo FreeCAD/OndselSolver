@@ -673,7 +673,7 @@ target_sources(OndselSolver PRIVATE
 
 set_target_properties(OndselSolver
         PROPERTIES VERSION ${PROJECT_VERSION}
-        SOVERSION 1
+        SOVERSION 2
         PUBLIC_HEADER "${ONDSELSOLVER_HEADERS}"
 )
 

@@ -4,6 +4,14 @@ Forward dynamics is implemented in the bundled OndselSolver library. FreeCADMbD
 is a source of ported code, **not** an additional solver dependency or runtime
 backend. The existing assembly-solving and `runKINEMATIC()` entry points remain.
 
+Kinematic simulations retain upstream's drag-only limit behavior. Forward
+dynamics includes active stops in both initial-condition and integration
+equations, so impacts and separating reactions are handled during the run.
+
+This release changes C++ class layouts and virtual interfaces. Rebuild callers
+against the new headers and library; it is not a binary-compatible replacement
+for the version-1 shared library. The shared-library ABI version is now 2.
+
 ## Entry point and inputs
 
 Construct an `ASMTAssembly` using the existing parts, mass markers, attachment
