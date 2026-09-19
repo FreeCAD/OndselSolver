@@ -35,25 +35,29 @@ void MbD::ASMTLimit::storeOnLevel(std::ofstream& os, size_t level)
 
 void MbD::ASMTLimit::readMotionJoint(std::vector<std::string>& lines)
 {
-	assert(readStringOffTop(lines) == "MotionJoint");
+	[[maybe_unused]] auto motionJointHeader = readStringOffTop(lines);
+	assert(motionJointHeader == "MotionJoint");
 	motionJoint = readStringOffTop(lines);
 }
 
 void MbD::ASMTLimit::readLimit(std::vector<std::string>& lines)
 {
-	assert(readStringOffTop(lines) == "Limit");
+	[[maybe_unused]] auto limitHeader = readStringOffTop(lines);
+	assert(limitHeader == "Limit");
 	limit = readStringOffTop(lines);
 }
 
 void MbD::ASMTLimit::readType(std::vector<std::string>& lines)
 {
-	assert(readStringOffTop(lines) == "Type");
+	[[maybe_unused]] auto typeHeader = readStringOffTop(lines);
+	assert(typeHeader == "Type");
 	type = readStringOffTop(lines);
 }
 
 void MbD::ASMTLimit::readTol(std::vector<std::string>& lines)
 {
-	assert(readStringOffTop(lines) == "Tol");
+	[[maybe_unused]] auto tolHeader = readStringOffTop(lines);
+	assert(tolHeader == "Tol");
 	tol = readStringOffTop(lines);
 }
 

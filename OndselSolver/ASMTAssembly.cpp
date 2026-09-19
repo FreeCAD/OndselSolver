@@ -381,7 +381,8 @@ std::shared_ptr<ASMTAssembly> MbD::ASMTAssembly::assemblyFromFile(const std::str
     [[maybe_unused]] bool bool1 = str == "freeCAD: 3D CAD with Motion Simulation  by  askoh.com";
     [[maybe_unused]] bool bool2 = str == "OndselSolver";
     assert(bool1 || bool2);
-    assert(assembly->readStringOffTop(lines) == "Assembly");
+    [[maybe_unused]] auto assemblyHeader = assembly->readStringOffTop(lines);
+    assert(assemblyHeader == "Assembly");
     assembly->setFilename(fileName);
     assembly->parseASMT(lines);
     return assembly;
@@ -1062,21 +1063,26 @@ void MbD::ASMTAssembly::runDraggingLog(const std::string& fileName)
     while (std::getline(stream, line)) {
         lines.push_back(line);
     }
-    assert(readStringOffTop(lines) == "runPreDrag");
+    [[maybe_unused]] auto runPreDragHeader = readStringOffTop(lines);
+    assert(runPreDragHeader == "runPreDrag");
     runPreDrag();
     while (lines[0].find("runDragStep") != std::string::npos) {
-        assert(readStringOffTop(lines) == "runDragStep");
+        [[maybe_unused]] auto runDragStepHeader = readStringOffTop(lines);
+        assert(runDragStepHeader == "runDragStep");
         auto dragParts = std::make_shared<std::vector<std::shared_ptr<ASMTPart>>>();
         while (lines[0].find("Name") != std::string::npos) {
-            assert(readStringOffTop(lines) == "Name");
+            [[maybe_unused]] auto nameHeader = readStringOffTop(lines);
+            assert(nameHeader == "Name");
             auto dragPartName = readStringOffTop(lines);
             std::string longerName = "/" + name + "/" + dragPartName;
             auto dragPart = partAt(longerName);
             dragParts->push_back(dragPart);
-            assert(readStringOffTop(lines) == "Position3D");
+            [[maybe_unused]] auto position3DHeader = readStringOffTop(lines);
+            assert(position3DHeader == "Position3D");
             auto dragPartPosition3D = readColumnOfDoublesOffTop(lines);
             dragPart->setPosition3D(dragPartPosition3D);
-            assert(readStringOffTop(lines) == "RotationMatrix");
+            [[maybe_unused]] auto rotationMatrixHeader = readStringOffTop(lines);
+            assert(rotationMatrixHeader == "RotationMatrix");
             auto dragPartRotationMatrix = std::make_shared<FullMatrix<double>>(3);
             for (size_t i = 0; i < 3; i++) {
                 auto row = readRowOfDoublesOffTop(lines);
@@ -1086,7 +1092,8 @@ void MbD::ASMTAssembly::runDraggingLog(const std::string& fileName)
         }
         runDragStep(dragParts);
     }
-    assert(readStringOffTop(lines) == "runPostDrag");
+    [[maybe_unused]] auto runPostDragHeader = readStringOffTop(lines);
+    assert(runPostDragHeader == "runPostDrag");
     runPostDrag();
 }
 
