@@ -7,6 +7,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <iterator>
 
 #include "Polynomial.h"
 #include "Constant.h"

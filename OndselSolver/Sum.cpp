@@ -12,6 +12,7 @@
 #include "Sum.h"
 #include "Constant.h"
 #include <algorithm>
+#include <iterator>
 #include "Integral.h"
 
 using namespace MbD;
