@@ -112,3 +112,31 @@ double MbD::OrbitAngleZIecJec::value()
 {
 	return thez;
 }
+
+void OrbitAngleZIecJec::postDynPredictor()
+{
+    xIeJeIe->postDynPredictor();
+    yIeJeIe->postDynPredictor();
+    KinematicIeJe::postDynPredictor();
+}
+
+void OrbitAngleZIecJec::postDynCorrectorIteration()
+{
+    xIeJeIe->postDynCorrectorIteration();
+    yIeJeIe->postDynCorrectorIteration();
+    KinematicIeJe::postDynCorrectorIteration();
+}
+
+void OrbitAngleZIecJec::preDynOutput()
+{
+    xIeJeIe->preDynOutput();
+    yIeJeIe->preDynOutput();
+    KinematicIeJe::preDynOutput();
+}
+
+void OrbitAngleZIecJec::postDynOutput()
+{
+    xIeJeIe->postDynOutput();
+    yIeJeIe->postDynOutput();
+    KinematicIeJe::postDynOutput();
+}

@@ -16,6 +16,10 @@ namespace MbD {
     {
         //distIeJe
     public:
+        void postDynPredictor() override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
         DistanceConstraintIJ(EndFrmsptr frmi, EndFrmsptr frmj);
 
         static std::shared_ptr<DistanceConstraintIJ> With(EndFrmsptr frmi, EndFrmsptr frmj);

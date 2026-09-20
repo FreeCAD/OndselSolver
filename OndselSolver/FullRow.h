@@ -186,7 +186,7 @@ namespace MbD {
 	{
 		auto ncol = this->size();
 		auto nelem = vecvec->at(0)->size();
-		auto answer = std::make_shared<FullVector<T>>(nelem);
+		auto answer = std::make_shared<FullColumn<T>>(nelem);
 		for (size_t k = 0; k < nelem; k++) {
 			auto sum = 0.0;
 			for (size_t i = 0; i < ncol; i++)

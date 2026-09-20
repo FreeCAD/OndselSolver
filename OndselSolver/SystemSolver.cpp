@@ -11,6 +11,8 @@
 #include <algorithm>
 
 #include "SystemSolver.h"
+#include "DynIntegrator.h"
+#include "LimitIJ.h"
 #include "System.h"
 #include "NewtonRaphson.h"
 #include "PosICNewtonRaphson.h"
@@ -102,6 +104,23 @@ void SystemSolver::runAccIC()
 	icTypeSolver->run();
 }
 
+void SystemSolver::releaseSeparatingLimits()
+{
+    // Removing a tensile reaction redistributes the others. Re-solve after
+    // each batch; at least one active limit is removed per iteration.
+    while (true) {
+        bool released = false;
+        for (const auto& limit : *system->limits) {
+            if (limit->hasTensileReaction()) {
+                limit->deactivate();
+                released = true;
+            }
+        }
+        if (!released) return;
+        runAccIC();
+    }
+}
+
 bool SystemSolver::needToRedoPosIC()
 {
 	auto allRedunCons = this->allRedundantConstraints();
@@ -151,6 +170,50 @@ void SystemSolver::runCollisionDerivativeIC()
 
 void SystemSolver::runBasicCollision()
 {
+}
+
+void SystemSolver::runBasicDynamic()
+{
+    while (direction * tstart < direction * tend) {
+        try {
+            basicIntegrator = DynIntegrator::With();
+            basicIntegrator->setSystem(this);
+            basicIntegrator->run();
+            break;
+        }
+        catch (const DiscontinuityError& error) {
+            const auto& types = error.types();
+            const bool event = types && std::find(types->begin(), types->end(), EVENT) != types->end();
+            if (!types
+                || (!event && std::find(types->begin(), types->end(), TOUCHDOWN) == types->end()
+                    && std::find(types->begin(), types->end(), LIFTOFF) == types->end())) {
+                throw;
+            }
+            // A joint stop is a perfectly inelastic impact.  Project the
+            // interpolated velocity onto the newly active constraint, then
+            // restart the DAE with its new equation count.
+            const auto restartStage = [this](const char* stage, const auto& operation) {
+                try {
+                    operation();
+                }
+                catch (const std::exception& restartError) {
+                    throw SimulationStoppingError(
+                        std::string("Dynamic discontinuity ") + stage + " failed: " + restartError.what()
+                    );
+                }
+            };
+            // Interpolation locates the impact, and position IC removes the
+            // remaining interpolation error before the new constraint is
+            // used by the restarted DAE.
+            do {
+                restartStage("position projection", [this] { runPosIC(); });
+                restartStage("velocity projection", [this] { runVelIC(); });
+                restartStage("acceleration restart", [this] { runAccIC(); });
+                restartStage("limit release", [this] { releaseSeparatingLimits(); });
+            } while (event && system->dynamicEvents->settle(tstart));
+            if (event) output();
+        }
+    }
 }
 
 void SystemSolver::runBasicKinematic()
@@ -224,7 +287,9 @@ void MbD::SystemSolver::runPosICDrag(std::shared_ptr<std::vector<std::shared_ptr
 	icTypeSolver->run();
 }
 
-void MbD::SystemSolver::runPosICDragLimit(std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts)
+void MbD::SystemSolver::runPosICDragLimit(
+	std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts
+)
 {
 	//Assume no redundant constraints
 	auto newtonRaphson = PosICDragLimitNewtonRaphson::With();
@@ -257,7 +322,8 @@ void SystemSolver::runAccICKine()
 
 void SystemSolver::partsJointsMotionsDo(const std::function<void(std::shared_ptr<Item>)>& f)
 {
-	system->partsJointsMotionsDo(f);
+	if (system->runMode == System::RunMode::Dynamic) system->partsJointsMotionsLimitsDo(f);
+	else system->partsJointsMotionsDo(f);
 }
 
 void SystemSolver::logString(const std::string& str)
@@ -312,7 +378,8 @@ void SystemSolver::postNewtonRaphson()
 
 void SystemSolver::partsJointsMotionsForcesTorquesDo(const std::function<void(std::shared_ptr<Item>)>& f)
 {
-	system->partsJointsMotionsForcesTorquesDo(f);
+	if (system->runMode == System::RunMode::Dynamic) system->partsJointsMotionsLimitsForcesTorquesDo(f);
+	else system->partsJointsMotionsForcesTorquesDo(f);
 }
 
 void MbD::SystemSolver::partsJointsMotionsLimitsDo(const std::function<void(std::shared_ptr<Item>)>& f)

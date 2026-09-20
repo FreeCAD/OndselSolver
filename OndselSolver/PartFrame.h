@@ -30,6 +30,18 @@ namespace MbD {
 	{
 		//ToDo: part iqX iqE qX qE qXdot qEdot qXddot qEddot aGeu aGabs markerFrames 
 	public:
+        void fillpqsumu(FColDsptr col) override;
+        void fillpqsumudot(FColDsptr col) override;
+        void setpqsumu(FColDsptr col) override;
+        void setpqsumudot(FColDsptr col) override;
+        void setpqsumuddot(FColDsptr col) override;
+        void postDynPredictor() override;
+        void fillDynError(FColDsptr col) override;
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
 		PartFrame();
 		PartFrame(const std::string& str);
 		System* root() override;

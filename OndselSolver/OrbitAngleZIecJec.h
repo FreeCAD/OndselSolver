@@ -16,6 +16,10 @@ namespace MbD {
     {
         //thez xIeJeIe yIeJeIe cosOverSSq sinOverSSq twoCosSinOverSSqSq dSqOverSSqSq 
     public:
+        void postDynPredictor() override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
         OrbitAngleZIecJec();
         OrbitAngleZIecJec(EndFrmsptr frmi, EndFrmsptr frmj);
 

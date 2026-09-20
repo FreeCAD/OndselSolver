@@ -118,6 +118,9 @@ namespace MbD {
 		virtual void preDynOutput();
 		virtual void preDynPredictor();
 		virtual void preDynStep();
+        // A converged trial may still cross a force discontinuity. Returning
+        // false retries it at a smaller step without committing any history.
+        virtual bool acceptDynTrial() const { return true; }
 		virtual void preICRestart();
 		virtual void prePosIC();
 		virtual void prePosKine();

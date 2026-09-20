@@ -101,3 +101,31 @@ ConstraintType MbD::DistancexyConstraintIJ::type()
 {
 	return displacement;
 }
+
+void DistancexyConstraintIJ::postDynPredictor()
+{
+    xIeJeIe->postDynPredictor();
+    yIeJeIe->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void DistancexyConstraintIJ::postDynCorrectorIteration()
+{
+    xIeJeIe->postDynCorrectorIteration();
+    yIeJeIe->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void DistancexyConstraintIJ::preDynOutput()
+{
+    xIeJeIe->preDynOutput();
+    yIeJeIe->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void DistancexyConstraintIJ::postDynOutput()
+{
+    xIeJeIe->postDynOutput();
+    yIeJeIe->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

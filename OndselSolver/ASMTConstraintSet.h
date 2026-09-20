@@ -5,22 +5,25 @@
  *                                                                         *
  *   See LICENSE file for details about copyright.                         *
  ***************************************************************************/
- 
+
 #pragma once
 
 #include "ASMTItemIJ.h"
 
 namespace MbD {
-    class Joint;
 
-    class ASMTConstraintSet : public ASMTItemIJ
-    {
-        //
-    public:
-        void updateFromMbD() override;
-        void compareResults(AnalysisType type) override;
-        void outputResults(AnalysisType type) override;
+class Joint;
 
-    };
-}
+class ASMTConstraintSet : public ASMTItemIJ
+{
+public:
+    void initialize() override;
+    void clearResults();
+    void updateFromMbD() override;
+    void compareResults(AnalysisType type) override;
+    void outputResults(AnalysisType type) override;
 
+    FRowDsptr powers;
+};
+
+}  // namespace MbD

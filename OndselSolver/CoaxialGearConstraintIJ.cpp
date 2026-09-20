@@ -122,6 +122,32 @@ void MbD::CoaxialGearConstraintIJ::fillPosICJacob(SpMatDsptr mat)
     mat->atijplusTransposeFullMatrix(iqEJ, iqEK, ppGpEKpEJlam);
 }
 
+void MbD::CoaxialGearConstraintIJ::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+    mat->atijplusFullRow(iG, iqEK, pGpEK);
+
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+    mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+    mat->atijplusFullMatrixtimes(iqEK, iqEK, ppGpEKpEK, lam);
+
+    auto ppGpEKpEIlam = ppGpEKpEI->times(lam);
+    mat->atijplusFullMatrix(iqEK, iqEI, ppGpEKpEIlam);
+    mat->atijplusTransposeFullMatrix(iqEI, iqEK, ppGpEKpEIlam);
+
+    auto ppGpEKpEJlam = ppGpEKpEJ->times(lam);
+    mat->atijplusFullMatrix(iqEK, iqEJ, ppGpEKpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqEK, ppGpEKpEJlam);
+}
+
+void MbD::CoaxialGearConstraintIJ::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+    mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+    mat->atijplusFullColumn(iqEK, iG, pGpEK->transpose());
+}
+
 void MbD::CoaxialGearConstraintIJ::fillPosKineJacob(SpMatDsptr mat)
 {
     mat->atijplusFullRow(iG, iqEI, pGpEI);
@@ -202,6 +228,11 @@ double MbD::CoaxialGearConstraintIJ::ratio() const
         throw SimulationStoppingError("Gear radius is zero.");
     }
     return radiusI / radiusJ;
+}
+
+void CoaxialGearConstraintIJ::preDyn()
+{
+    Constraint::preDyn();
 }
 
 void MbD::CoaxialGearConstraintIJ::simUpdateAll()

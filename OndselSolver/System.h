@@ -22,6 +22,7 @@
 
 #include "Item.h"
 #include "LimitIJ.h"
+#include "DynamicEvents.h"
 
 namespace MbD {
 	class Part;
@@ -47,6 +48,7 @@ namespace MbD {
 		void runPreDrag(std::shared_ptr<System> self);
 		void runDragStep(std::shared_ptr<System> self, std::shared_ptr<std::vector<std::shared_ptr<Part>>> dragParts);
 		void runKINEMATIC(std::shared_ptr<System> self);
+		void runDYNAMIC(std::shared_ptr<System> self);
 		std::shared_ptr<std::vector<std::string>> discontinuitiesAtIC();
 		void jointsMotionsDo(const std::function <void(std::shared_ptr<Joint>)>& f);
 		void partsJointsMotionsDo(const std::function <void(std::shared_ptr<Item>)>& f);
@@ -85,5 +87,10 @@ namespace MbD {
 		std::shared_ptr<SystemSolver> systemSolver;
 
 		std::shared_ptr<Time> time;
+        std::shared_ptr<DynamicEvents> dynamicEvents;
+        // Kinematics ignores stops; forward dynamics must include active stops
+        // in its initial-condition and integration equations.
+        enum class RunMode { Dragging, Kinematic, Dynamic };
+        RunMode runMode = RunMode::Dragging;
 	};
 }

@@ -20,6 +20,9 @@ namespace MbD {
 		//time rmemBlks prmemptBlks pprmemptptBlks phiThePsiBlks pPhiThePsiptBlks ppPhiThePsiptptBlks 
 		//rmem prmempt pprmemptpt aAme pAmept ppAmeptpt prOeOpt pprOeOpEpt pprOeOptpt pAOept ppAOepEpt ppAOeptpt 
 	public:
+        void postDynPredictor() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
 		EndFrameqct();
 		EndFrameqct(const std::string& str);
 		void initialize() override;

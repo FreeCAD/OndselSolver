@@ -8,22 +8,27 @@
  
 #pragma once
 
-#include <vector>
+//#include <vector>
 
 #include "Integrator.h"
 
 namespace MbD {
     class IntegratorInterface;
-    class DifferenceOperator;
+    class LinearMultiStepMethod;
+    template<typename T>
+    class FullColumn;
+    using FColDsptr = std::shared_ptr<FullColumn<double>>;
 
     class BasicIntegrator : public Integrator
     {
         //istep iTry maxTry tpast t tnew h hnew order orderNew orderMax opBDF continue 
     public:
+        static std::shared_ptr<BasicIntegrator> With();
+        void initialize() override;
+
         virtual void calcOperatorMatrix();
         virtual void incrementTime();
         virtual void incrementTry();
-        void initialize() override;
         void initializeGlobally() override;
         void initializeLocally() override;
         void iStep(size_t i) override;
@@ -43,15 +48,16 @@ namespace MbD {
         virtual void setorder(size_t o);
         virtual void settnew(double t);
         virtual void sett(double t);
-        void settime(double t);
-        double tprevious();
+        virtual void settime(double t);
+        double tprevious() const;
+        virtual FColDsptr yDerivat(size_t _order, double tout);
 
-        IntegratorInterface* system;
+        IntegratorInterface* system = nullptr;
         size_t istep = 0, iTry = 0, maxTry = 0;
         std::shared_ptr<std::vector<double>> tpast;
-        double t = 0.0, tnew = 0.0, h = 0, hnew = 0.0;
+        double t = 0.0, tnew = 0.0, h = 0.0, hnew = 0.0;
         size_t order = 0, orderNew = 0, orderMax = 0;
-        std::shared_ptr<DifferenceOperator> opBDF;
+        std::shared_ptr<LinearMultiStepMethod> opBDF;
         bool _continue = false;
     };
 }

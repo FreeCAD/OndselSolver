@@ -84,3 +84,27 @@ void DirectionCosineConstraintIJ::preAccIC()
 	aAijIeJe->preAccIC();
 	ConstraintIJ::preAccIC();
 }
+
+void DirectionCosineConstraintIJ::postDynPredictor()
+{
+    aAijIeJe->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void DirectionCosineConstraintIJ::postDynCorrectorIteration()
+{
+    aAijIeJe->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void DirectionCosineConstraintIJ::preDynOutput()
+{
+    aAijIeJe->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void DirectionCosineConstraintIJ::postDynOutput()
+{
+    aAijIeJe->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

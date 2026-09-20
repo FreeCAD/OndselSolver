@@ -150,3 +150,20 @@ void MbD::DistancexyConstraintIqcJc::useEquationNumbers()
 	iqXI = frmIeqc->iqX();
 	iqEI = frmIeqc->iqE();
 }
+
+void DistancexyConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusFullRow(iG, iqXI, pGpXI);
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    mat->atijplusFullMatrixtimes(iqXI, iqXI, ppGpXIpXI, lam);
+    auto ppGpXIpEIlam = ppGpXIpEI->times(lam);
+    mat->atijplusFullMatrix(iqXI, iqEI, ppGpXIpEIlam);
+    mat->atijplusTransposeFullMatrix(iqEI, iqXI, ppGpXIpEIlam);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void DistancexyConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqXI, iG, pGpXI->transpose());
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}

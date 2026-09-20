@@ -192,3 +192,63 @@ void MbD::ConstraintSet::postDynStep()
 {
 	constraintsDo([](std::shared_ptr<Constraint> constraint) { constraint->postDynStep(); });
 }
+
+void ConstraintSet::fillpqsumu(FColDsptr col)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->fillpqsumu(col); });
+}
+
+void ConstraintSet::fillpqsumudot(FColDsptr col)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->fillpqsumudot(col); });
+}
+
+void ConstraintSet::setpqsumu(FColDsptr col)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->setpqsumu(col); });
+}
+
+void ConstraintSet::setpqsumudot(FColDsptr col)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->setpqsumudot(col); });
+}
+
+void ConstraintSet::postDynPredictor()
+{
+    constraintsDo([](std::shared_ptr<Constraint> con) { con->postDynPredictor(); });
+}
+
+void ConstraintSet::fillDynError(FColDsptr col)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->fillDynError(col); });
+}
+
+void ConstraintSet::fillpFpy(SpMatDsptr mat)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->fillpFpy(mat); });
+}
+
+void ConstraintSet::fillpFpydot(SpMatDsptr mat)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->fillpFpydot(mat); });
+}
+
+void ConstraintSet::postDynCorrectorIteration()
+{
+    constraintsDo([](std::shared_ptr<Constraint> con) { con->postDynCorrectorIteration(); });
+}
+
+void ConstraintSet::postDynOutput()
+{
+    constraintsDo([](std::shared_ptr<Constraint> con) { con->postDynOutput(); });
+}
+
+void ConstraintSet::preDynOutput()
+{
+    constraintsDo([](std::shared_ptr<Constraint> con) { con->preDynOutput(); });
+}
+
+void ConstraintSet::setpqsumuddot(FColDsptr col)
+{
+    constraintsDo([&](std::shared_ptr<Constraint> con) { con->setpqsumuddot(col); });
+}

@@ -15,6 +15,8 @@ namespace MbD {
     {
         //pGpXI pGpEI ppGpXIpEI ppGpEIpEI iqXI iqEI 
     public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
         RackPinConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj);
         
 		void initxIeJeIe() override;

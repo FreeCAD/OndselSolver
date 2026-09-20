@@ -91,3 +91,27 @@ ConstraintType MbD::DistanceConstraintIJ::type()
 {
 	return ConstraintType::displacement;
 }
+
+void DistanceConstraintIJ::postDynPredictor()
+{
+    distIeJe->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void DistanceConstraintIJ::postDynCorrectorIteration()
+{
+    distIeJe->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void DistanceConstraintIJ::preDynOutput()
+{
+    distIeJe->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void DistanceConstraintIJ::postDynOutput()
+{
+    distIeJe->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

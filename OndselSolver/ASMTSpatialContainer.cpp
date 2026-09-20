@@ -77,19 +77,22 @@ void MbD::ASMTSpatialContainer::setPrincipalMassMarker(std::shared_ptr<ASMTPrinc
 	principalMassMarker = aJ;
 }
 
+void ASMTSpatialContainer::clearResults()
+{
+    for (auto row : {xs, ys, zs, bryxs, bryys, bryzs, vxs, vys, vzs,
+                     omexs, omeys, omezs, axs, ays, azs, alpxs, alpys, alpzs}) {
+        if (row) row->clear();
+    }
+}
+
 void MbD::ASMTSpatialContainer::readRefPoints(std::vector<std::string>& lines)
 {
 	assert(lines[0].find("RefPoints") != std::string::npos);
 	lines.erase(lines.begin());
 	refPoints->clear();
-	auto it = std::find_if(lines.begin(), lines.end(), [](const std::string& s) {
-		return s.find("RefCurves") != std::string::npos;
-		});
-	std::vector<std::string> refPointsLines(lines.begin(), it);
-	while (!refPointsLines.empty()) {
-		readRefPoint(refPointsLines);
+	while (!lines.empty() && readString(lines.front()) == "RefPoint") {
+		readRefPoint(lines);
 	}
-	lines.erase(lines.begin(), it);
 }
 
 void MbD::ASMTSpatialContainer::readRefPoint(std::vector<std::string>& lines)
@@ -107,14 +110,9 @@ void MbD::ASMTSpatialContainer::readRefCurves(std::vector<std::string>& lines)
 	assert(lines[0].find("RefCurves") != std::string::npos);
 	lines.erase(lines.begin());
 	refCurves->clear();
-	auto it = std::find_if(lines.begin(), lines.end(), [](const std::string& s) {
-		return s.find("RefSurfaces") != std::string::npos;
-		});
-	std::vector<std::string> refCurvesLines(lines.begin(), it);
-	while (!refCurvesLines.empty()) {
-		readRefCurve(refCurvesLines);
+	while (!lines.empty() && readString(lines.front()) == "RefCurve") {
+		readRefCurve(lines);
 	}
-	lines.erase(lines.begin(), it);
 }
 
 void MbD::ASMTSpatialContainer::readRefCurve(std::vector<std::string>&)
@@ -127,14 +125,9 @@ void MbD::ASMTSpatialContainer::readRefSurfaces(std::vector<std::string>& lines)
 	assert(lines[0].find("RefSurfaces") != std::string::npos);
 	lines.erase(lines.begin());
 	refSurfaces->clear();
-	auto it = std::find_if(lines.begin(), lines.end(), [](const std::string& s) {
-		return s.find("Part") != std::string::npos;
-		});
-	std::vector<std::string> refSurfacesLines(lines.begin(), it);
-	while (!refSurfacesLines.empty()) {
-		readRefSurface(refSurfacesLines);
+	while (!lines.empty() && readString(lines.front()) == "RefSurface") {
+		readRefSurface(lines);
 	}
-	lines.erase(lines.begin(), it);
 }
 
 void MbD::ASMTSpatialContainer::readRefSurface(std::vector<std::string>&)

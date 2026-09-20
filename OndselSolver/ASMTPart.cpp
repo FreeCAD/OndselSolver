@@ -115,6 +115,15 @@ FColDsptr MbD::ASMTPart::omeOpO()
 	return omega3D;
 }
 
+void MbD::ASMTPart::setCenterOfMassVelocity3D(
+    double vx, double vy, double vz, double wx, double wy, double wz)
+{
+    omega3D = std::make_shared<FullColumn<double>>(ListD{wx, wy, wz});
+    auto vOcmO = std::make_shared<FullColumn<double>>(ListD{vx, vy, vz});
+    auto rPcmO = rotationMatrix->timesFullColumn(principalMassMarker->position3D);
+    velocity3D = vOcmO->minusFullColumn(omega3D->cross(rPcmO));
+}
+
 ASMTPart* MbD::ASMTPart::part()
 {
 	return this;

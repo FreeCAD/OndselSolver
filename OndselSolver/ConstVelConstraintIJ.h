@@ -17,6 +17,10 @@ namespace MbD {
     {
         //aA01IeJe aA10IeJe 
     public:
+        void postDynPredictor() override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
         ConstVelConstraintIJ(EndFrmsptr frmi, EndFrmsptr frmj);
 
         static std::shared_ptr<ConstVelConstraintIJ> With(EndFrmsptr frmi, EndFrmsptr frmj);

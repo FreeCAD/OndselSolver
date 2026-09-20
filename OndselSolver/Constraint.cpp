@@ -171,6 +171,26 @@ void Constraint::addToJointTorqueI(FColDsptr)
 {
 }
 
+double Constraint::constraintVelocity() const
+{
+	throw SimulationStoppingError("Generalized force is not implemented for this constraint.");
+}
+
+void Constraint::fillGeneralizedForce(FColDsptr, double)
+{
+	throw SimulationStoppingError("Generalized force is not implemented for this constraint.");
+}
+
+void Constraint::fillGeneralizedForcePositionJacobian(SpMatDsptr, double, double)
+{
+	throw SimulationStoppingError("Generalized force is not implemented for this constraint.");
+}
+
+void Constraint::fillGeneralizedForceVelocityJacobian(SpMatDsptr, double)
+{
+	throw SimulationStoppingError("Generalized force is not implemented for this constraint.");
+}
+
 void Constraint::fillConstraints(std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> allConstraints) {
     Item::fillConstraints(allConstraints);
 }
@@ -189,4 +209,35 @@ void Constraint::fillEssenConstraints(std::shared_ptr<std::vector<std::shared_pt
 
 void Constraint::fillPerpenConstraints(std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> perpenConstraints) {
     Item::fillPerpenConstraints(perpenConstraints);
+}
+
+void Constraint::setpqsumu(FColDsptr col)
+{
+    mu = col->at(iG);
+}
+
+void Constraint::setpqsumudot(FColDsptr col)
+{
+    lam = col->at(iG);
+}
+
+void Constraint::setpqsumuddot(FColDsptr col)
+{
+    //Do nothing
+}
+
+void Constraint::fillDynError(FColDsptr col)
+{
+    //"Same as fillPosICError: col."
+    fillPosICError(col);
+}
+
+void Constraint::fillpqsumu(FColDsptr col)
+{
+    col->atiput(iG, mu);
+}
+
+void Constraint::fillpqsumudot(FColDsptr col)
+{
+    col->atiput(iG, lam);
 }

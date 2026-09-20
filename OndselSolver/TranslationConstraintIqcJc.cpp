@@ -13,6 +13,24 @@
 
 using namespace MbD;
 
+namespace {
+void addOuterProduct(
+	SpMatDsptr mat,
+	size_t rowStart,
+	const FRowDsptr& row,
+	size_t columnStart,
+	const FRowDsptr& column,
+	double factor
+)
+{
+	for (size_t i = 0; i < row->size(); ++i) {
+		for (size_t j = 0; j < column->size(); ++j) {
+			mat->atijplusNumber(rowStart + i, columnStart + j, factor * row->at(i) * column->at(j));
+		}
+	}
+}
+}
+
 TranslationConstraintIqcJc::TranslationConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi) :
 	TranslationConstraintIJ(frmi, frmj, axisi)
 {
@@ -110,4 +128,60 @@ void TranslationConstraintIqcJc::addToJointTorqueI(FColDsptr jointTorque)
 		auto lampGpE = pGpEI->transpose()->times(lam);
 		auto c2Torque = aBOIp->timesFullColumn(lampGpE->minusFullColumn(fpAOIppEIrIpIeIp));
 		jointTorque->equalSelfPlusFullColumntimes(c2Torque, 0.5);
+}
+
+void TranslationConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusFullRow(iG, iqXI, pGpXI);
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    auto ppGpXIpEIlam = ppGpXIpEI->times(lam);
+    mat->atijplusFullMatrix(iqXI, iqEI, ppGpXIpEIlam);
+    mat->atijplusTransposeFullMatrix(iqEI, iqXI, ppGpXIpEIlam);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void TranslationConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqXI, iG, pGpXI->transpose());
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}
+
+double TranslationConstraintIqcJc::constraintVelocity() const
+{
+	auto frameI = std::static_pointer_cast<EndFrameqc>(frmI);
+	return pGpXI->timesFullColumn(frameI->qXdot())
+		+ pGpEI->timesFullColumn(frameI->qEdot());
+}
+
+void TranslationConstraintIqcJc::fillGeneralizedForce(FColDsptr col, double multiplier)
+{
+	col->atiplusFullVectortimes(iqXI, pGpXI, multiplier);
+	col->atiplusFullVectortimes(iqEI, pGpEI, multiplier);
+}
+
+void TranslationConstraintIqcJc::fillGeneralizedForcePositionJacobian(
+	SpMatDsptr mat,
+	double multiplier,
+	double derivative
+)
+{
+	auto crossHessian = ppGpXIpEI->times(multiplier);
+	mat->atijplusFullMatrix(iqXI, iqEI, crossHessian);
+	mat->atijplusTransposeFullMatrix(iqEI, iqXI, crossHessian);
+	mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, multiplier);
+	addOuterProduct(mat, iqXI, pGpXI, iqXI, pGpXI, derivative);
+	addOuterProduct(mat, iqXI, pGpXI, iqEI, pGpEI, derivative);
+	addOuterProduct(mat, iqEI, pGpEI, iqXI, pGpXI, derivative);
+	addOuterProduct(mat, iqEI, pGpEI, iqEI, pGpEI, derivative);
+}
+
+void TranslationConstraintIqcJc::fillGeneralizedForceVelocityJacobian(
+	SpMatDsptr mat,
+	double derivative
+)
+{
+	addOuterProduct(mat, iqXI, pGpXI, iqXI, pGpXI, derivative);
+	addOuterProduct(mat, iqXI, pGpXI, iqEI, pGpEI, derivative);
+	addOuterProduct(mat, iqEI, pGpEI, iqXI, pGpXI, derivative);
+	addOuterProduct(mat, iqEI, pGpEI, iqEI, pGpEI, derivative);
 }

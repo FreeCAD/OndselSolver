@@ -148,3 +148,24 @@ std::string MbD::ScrewConstraintIqcJqc::constraintSpec()
 {
 	return "ScrewConstraintIJ";
 }
+
+void ScrewConstraintIqcJqc::fillpFpy(SpMatDsptr mat)
+{
+    ScrewConstraintIqcJc::fillpFpy(mat);
+    mat->atijplusFullRow(iG, iqXJ, pGpXJ);
+    mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+    auto ppGpEIpXJlam = ppGpEIpXJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqXJ, ppGpEIpXJlam);
+    mat->atijplusTransposeFullMatrix(iqXJ, iqEI, ppGpEIpXJlam);
+    auto ppGpEIpEJlam = ppGpEIpEJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqEJ, ppGpEIpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqEI, ppGpEIpEJlam);
+    mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+}
+
+void ScrewConstraintIqcJqc::fillpFpydot(SpMatDsptr mat)
+{
+    ScrewConstraintIqcJc::fillpFpydot(mat);
+    mat->atijplusFullColumn(iqXJ, iG, pGpXJ->transpose());
+    mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+}

@@ -106,3 +106,14 @@ void MbD::ConstVelConstraintIqcJc::useEquationNumbers()
 {
 	iqEI = std::static_pointer_cast<EndFrameqc>(frmI)->iqE();
 }
+
+void ConstVelConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void ConstVelConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}

@@ -17,6 +17,10 @@ namespace MbD {
     {
         //zIeJeIe thezIeJe pitch 
     public:
+        void postDynPredictor() override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynOutput() override;
         ScrewConstraintIJ(EndFrmsptr frmi, EndFrmsptr frmj);
 
         static std::shared_ptr<ScrewConstraintIJ> With(EndFrmsptr frmi, EndFrmsptr frmj);

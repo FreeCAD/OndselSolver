@@ -60,6 +60,7 @@
 #include "ASMTRevRevJoint.h"
 #include "ASMTLimit.h"
 #include "ASMTRotationLimit.h"
+#include "ASMTDistanceLimit.h"
 #include "ASMTTranslationLimit.h"
 #include "ExternalSystem.h"
 #if __GNUC__ >= 8
@@ -381,7 +382,9 @@ std::shared_ptr<ASMTAssembly> MbD::ASMTAssembly::assemblyFromFile(const std::str
     [[maybe_unused]] bool bool1 = str == "freeCAD: 3D CAD with Motion Simulation  by  askoh.com";
     [[maybe_unused]] bool bool2 = str == "OndselSolver";
     assert(bool1 || bool2);
-    assert(assembly->readStringOffTop(lines) == "Assembly");
+    if (assembly->readStringOffTop(lines) != "Assembly") {
+        throw SimulationStoppingError("Expected Assembly record.");
+    }
     assembly->setFilename(fileName);
     assembly->parseASMT(lines);
     return assembly;
@@ -812,6 +815,9 @@ void MbD::ASMTAssembly::readLimits(std::vector<std::string>& lines)
         if (limitsLines[0] == "\t\t\tRotationLimit") {
             limit = ASMTRotationLimit::With();
         }
+        else if (limitsLines[0] == "\t\t\tDistanceLimit") {
+            limit = ASMTDistanceLimit::With();
+        }
         else if (limitsLines[0] == "\t\t\tTranslationLimit") {
             limit = ASMTTranslationLimit::With();
         }
@@ -923,34 +929,16 @@ void MbD::ASMTAssembly::readTimes(std::vector<std::string>& lines)
 
 void MbD::ASMTAssembly::readPartSeriesMany(std::vector<std::string>& lines)
 {
-    if (lines.empty()) {
-        return;
+    while (!lines.empty() && readString(lines.front()).rfind("PartSeries\t", 0) == 0) {
+        readPartSeries(lines);
     }
-    assert(lines[0].find("PartSeries") != std::string::npos);
-    auto it = std::find_if(lines.begin(), lines.end(), [](const std::string& s) {
-        return s.find("JointSeries") != std::string::npos;
-    });
-    std::vector<std::string> partSeriesLines(lines.begin(), it);
-    while (!partSeriesLines.empty()) {
-        readPartSeries(partSeriesLines);
-    }
-    lines.erase(lines.begin(), it);
 }
 
 void MbD::ASMTAssembly::readJointSeriesMany(std::vector<std::string>& lines)
 {
-    if (lines.empty()) {
-        return;
+    while (!lines.empty() && readString(lines.front()).rfind("JointSeries\t", 0) == 0) {
+        readJointSeries(lines);
     }
-    assert(lines[0].find("JointSeries") != std::string::npos);
-    auto it = std::find_if(lines.begin(), lines.end(), [](const std::string& s) {
-        return s.find("tionSeries") != std::string::npos;
-    });
-    std::vector<std::string> jointSeriesLines(lines.begin(), it);
-    while (!jointSeriesLines.empty()) {
-        readJointSeries(jointSeriesLines);
-    }
-    lines.erase(lines.begin(), it);
 }
 
 void MbD::ASMTAssembly::readAssemblySeries(std::vector<std::string>& lines)
@@ -1001,6 +989,13 @@ void MbD::ASMTAssembly::readPartSeries(std::vector<std::string>& lines)
     auto it = std::find_if(parts->begin(), parts->end(), [&](const std::shared_ptr<ASMTPart>& prt) {
         return prt->fullName("") == seriesName;
     });
+    if (it == parts->end()) {
+        std::string message = "PartSeries references an unknown part: " + seriesName + ". Available parts:";
+        for (const auto& part : *parts) {
+            message += " " + part->fullName("");
+        }
+        throw SimulationStoppingError(message);
+    }
     auto& part = *it;
     part->readPartSeries(lines);
 }
@@ -1020,14 +1015,16 @@ void MbD::ASMTAssembly::readJointSeries(std::vector<std::string>& lines)
         std::find_if(joints->begin(), joints->end(), [&](const std::shared_ptr<ASMTJoint>& jt) {
             return jt->fullName("") == seriesName;
         });
+    if (it == joints->end()) {
+        throw SimulationStoppingError("JointSeries references an unknown joint: " + seriesName);
+    }
     auto& joint = *it;
     joint->readJointSeries(lines);
 }
 
 void MbD::ASMTAssembly::readMotionSeriesMany(std::vector<std::string>& lines)
 {
-    while (!lines.empty()) {
-        assert(lines[0].find("tionSeries") != std::string::npos);
+    while (!lines.empty() && readString(lines.front()).find("tionSeries\t") != std::string::npos) {
         readMotionSeries(lines);
     }
 }
@@ -1047,6 +1044,9 @@ void MbD::ASMTAssembly::readMotionSeries(std::vector<std::string>& lines)
         std::find_if(motions->begin(), motions->end(), [&](const std::shared_ptr<ASMTMotion>& jt) {
             return jt->fullName("") == seriesName;
         });
+    if (it == motions->end()) {
+        throw SimulationStoppingError("MotionSeries references an unknown motion: " + seriesName);
+    }
     auto& motion = *it;
     motion->readMotionSeries(lines);
 }
@@ -1062,21 +1062,26 @@ void MbD::ASMTAssembly::runDraggingLog(const std::string& fileName)
     while (std::getline(stream, line)) {
         lines.push_back(line);
     }
-    assert(readStringOffTop(lines) == "runPreDrag");
+    auto expectRecord = [&](const std::string& expected) {
+        if (lines.empty() || readStringOffTop(lines) != expected) {
+            throw SimulationStoppingError("Expected dragging log record: " + expected);
+        }
+    };
+    expectRecord("runPreDrag");
     runPreDrag();
-    while (lines[0].find("runDragStep") != std::string::npos) {
-        assert(readStringOffTop(lines) == "runDragStep");
+    while (!lines.empty() && lines[0].find("runDragStep") != std::string::npos) {
+        expectRecord("runDragStep");
         auto dragParts = std::make_shared<std::vector<std::shared_ptr<ASMTPart>>>();
-        while (lines[0].find("Name") != std::string::npos) {
-            assert(readStringOffTop(lines) == "Name");
+        while (!lines.empty() && lines[0].find("Name") != std::string::npos) {
+            expectRecord("Name");
             auto dragPartName = readStringOffTop(lines);
             std::string longerName = "/" + name + "/" + dragPartName;
             auto dragPart = partAt(longerName);
             dragParts->push_back(dragPart);
-            assert(readStringOffTop(lines) == "Position3D");
+            expectRecord("Position3D");
             auto dragPartPosition3D = readColumnOfDoublesOffTop(lines);
             dragPart->setPosition3D(dragPartPosition3D);
-            assert(readStringOffTop(lines) == "RotationMatrix");
+            expectRecord("RotationMatrix");
             auto dragPartRotationMatrix = std::make_shared<FullMatrix<double>>(3);
             for (size_t i = 0; i < 3; i++) {
                 auto row = readRowOfDoublesOffTop(lines);
@@ -1086,7 +1091,7 @@ void MbD::ASMTAssembly::runDraggingLog(const std::string& fileName)
         }
         runDragStep(dragParts);
     }
-    assert(readStringOffTop(lines) == "runPostDrag");
+    expectRecord("runPostDrag");
     runPostDrag();
 }
 
@@ -1439,6 +1444,48 @@ void MbD::ASMTAssembly::restorePosRot()
     }
 }
 
+void MbD::ASMTAssembly::runDYNAMIC()
+{
+    if (!simulationParameters || !constantGravity || !parts || parts->empty())
+        throw std::invalid_argument("Dynamics requires simulation parameters, gravity and at least one body");
+    const auto& p = *simulationParameters;
+    auto positive = [](double x) { return std::isfinite(x) && x > 0; };
+    if (!std::isfinite(p.tstart) || !std::isfinite(p.tend) || !(p.tend > p.tstart)
+        || !positive(p.hout) || !positive(p.hmin) || !positive(p.hmax) || p.hmin > p.hmax
+        || p.tstart+p.hout == p.tstart || p.tstart+p.hmin == p.tstart
+        || !positive(p.corAbsTol) || !positive(p.corRelTol)
+        || !positive(p.intAbsTol) || !positive(p.intRelTol)
+        || !positive(p.errorTolPosKine) || !positive(p.errorTolAccKine)
+        || p.iterMaxDyn == 0 || p.orderMax == 0 || p.orderMax > 5)
+        throw std::invalid_argument("Invalid forward-dynamics interval, step sizes, tolerances or iteration/order limits");
+    const auto gravity = constantGravity->getg();
+    if (!gravity || gravity->size() != 3
+        || !std::all_of(gravity->begin(), gravity->end(), [](double x) { return std::isfinite(x); }))
+        throw std::invalid_argument("Gravity must have three finite components");
+    for (const auto& part : *parts) {
+        if (!part || !part->principalMassMarker)
+            throw std::invalid_argument("A dynamics body is missing its mass properties");
+        if (part->isFixed) continue;
+        const auto& mass = *part->principalMassMarker;
+        if (!positive(mass.mass) || !mass.momentOfInertias || mass.momentOfInertias->size() != 3
+            || !std::all_of(mass.momentOfInertias->begin(), mass.momentOfInertias->end(), positive))
+            throw std::invalid_argument("Moving bodies require finite, positive mass and principal inertias: " + part->name);
+    }
+    mbdSystem = std::make_shared<System>();
+    mbdSystem->externalSystem->asmtAssembly = this;
+    mbdSystem->dynamicEvents = dynamicEvents;
+    // Current placements and velocities are the inputs to each run. Replace
+    // output histories; callers can explicitly restore the input state first.
+    times->clear();
+    clearResults();
+    for (auto& part : *parts) part->clearResults();
+    for (auto& joint : *joints) joint->clearResults();
+    for (auto& motion : *motions) motion->clearResults();
+    for (auto& load : *forcesTorques) load->clearResults();
+    for (auto& limit : *limits) limit->clearResults();
+    mbdSystem->runDYNAMIC(mbdSystem);
+}
+
 void MbD::ASMTAssembly::runKINEMATIC()
 {
     mbdSystem = std::make_shared<System>();
@@ -1569,6 +1616,11 @@ void MbD::ASMTAssembly::updateFromMbD()
     for (auto& forceTorque : *forcesTorques) {
         forceTorque->updateFromMbD();
     }
+    if (mbdSystem->runMode != System::RunMode::Kinematic) {
+        for (auto& limit : *limits) {
+            limit->updateFromMbD();
+        }
+    }
 }
 
 void MbD::ASMTAssembly::compareResults(AnalysisType type)
@@ -1615,6 +1667,13 @@ void MbD::ASMTAssembly::addMotion(std::shared_ptr<ASMTMotion> motion)
     motions->push_back(motion);
     motion->owner = this;
     motion->initMarkers();
+}
+
+void ASMTAssembly::addForceTorque(std::shared_ptr<ASMTForceTorque> load)
+{
+    if (!load) throw std::invalid_argument("Cannot add a null load");
+    forcesTorques->push_back(load);
+    load->owner = this;
 }
 
 void MbD::ASMTAssembly::addLimit(std::shared_ptr<ASMTLimit> limit)

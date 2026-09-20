@@ -16,6 +16,27 @@
 
 using namespace MbD;
 
+void DifferenceOperator::formDegenerateTaylorRow(size_t i) const
+{
+    auto row = taylorMatrix->at(i);
+    row->zeroSelf();
+    row->at(0) = 1.0;
+}
+
+FColDsptr DifferenceOperator::valueWith(std::shared_ptr<std::vector<FColDsptr>> series)
+{
+    return derivativewith(0, series);
+}
+
+FColDsptr DifferenceOperator::derivativewith(size_t deriv, std::shared_ptr<std::vector<FColDsptr>> series) const
+{
+    const auto coefficients = operatorMatrix->at(deriv);
+    auto result = series->at(0)->times(coefficients->at(0));
+    for (size_t i = 1; i < coefficients->size(); ++i)
+        result->equalSelfPlusFullVectortimes(series->at(i), coefficients->at(i));
+    return result;
+}
+
 FRowDsptr DifferenceOperator::OneOverFactorials = []() {
 	auto oneOverFactorials = std::make_shared<FullRow<double>>(10);
 	for (size_t i = 0; i < oneOverFactorials->size(); i++)
@@ -32,12 +53,26 @@ void DifferenceOperator::calcOperatorMatrix()
 	//valuedot(time) : = (operatorMatrix at : 2) timesColumn : series.
 	//valueddot(time) : = (operatorMatrix at : 3) timesColumn : series.
 
-	this->formTaylorMatrix();
-	try {
-		operatorMatrix = CREATE<LDUFullMatParPv>::With()->inversesaveOriginal(taylorMatrix, false);
-	}
-	catch (const SingularMatrixError& ex) {
-	}
+    formTaylorMatrix();
+    // Taylor columns scale as powers of the time step. Equilibrate them before
+    // pivoting instead of ignoring a singular-matrix exception (which can leave
+    // a stale operator of the previous order). Rescale inverse rows afterwards.
+    const auto n = taylorMatrix->nrow();
+    auto scaled = std::make_shared<FullMatrix<double>>(n, n);
+    std::vector<double> scales(n, 0.0);
+    for (size_t j = 0; j < n; ++j) {
+        for (size_t i = 0; i < n; ++i)
+            scales[j] = std::max(scales[j], std::abs(taylorMatrix->at(i)->at(j)));
+        if (!(scales[j] > 0) || !std::isfinite(scales[j]))
+            throw SingularMatrixError("Invalid time nodes in the integration operator");
+        for (size_t i = 0; i < n; ++i)
+            scaled->at(i)->at(j) = taylorMatrix->at(i)->at(j) / scales[j];
+    }
+    auto inverse = CREATE<LDUFullMatParPv>::With()->inversesaveOriginal(scaled, false);
+    for (size_t i = 0; i < n; ++i)
+        for (size_t j = 0; j < n; ++j)
+            inverse->at(i)->at(j) /= scales[i];
+    operatorMatrix = inverse;
 }
 
 void DifferenceOperator::initialize()

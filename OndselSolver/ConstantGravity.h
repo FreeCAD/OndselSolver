@@ -15,6 +15,11 @@ namespace MbD {
     {
         //
     public:
+        void fillDynError(FColDsptr col) override;
+        void postDynCorrectorIteration() override;
+        void preDynOutput() override;
+        void postDynPredictor() override;
+        void postDynOutput() override;
         void fillAccICIterError(FColDsptr col) override;
 
         FColDsptr gXYZ;

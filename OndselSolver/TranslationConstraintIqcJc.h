@@ -15,6 +15,16 @@ namespace MbD {
     {
         //pGpXI pGpEI ppGpXIpEI ppGpEIpEI iqXI iqEI 
     public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
+		double constraintVelocity() const override;
+		void fillGeneralizedForce(FColDsptr col, double multiplier) override;
+		void fillGeneralizedForcePositionJacobian(
+			SpMatDsptr mat,
+			double multiplier,
+			double derivative
+		) override;
+		void fillGeneralizedForceVelocityJacobian(SpMatDsptr mat, double derivative) override;
         TranslationConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj, size_t axisi);
 
         void addToJointForceI(FColDsptr col) override;

@@ -27,6 +27,15 @@ namespace MbD {
 	{
 		//partFrame rpmp aApm rOmO aAOm prOmOpE pAOmpE pprOmOpEpE ppAOmpEpE endFrames 
 	public:
+        void fillpqsumu(FColDsptr col) override;
+        void fillpqsumudot(FColDsptr col) override;
+        void preDynOutput() override;
+        void setpqsumu(FColDsptr col) override;
+        void setpqsumudot(FColDsptr col) override;
+        void setpqsumuddot(FColDsptr col) override;
+        void postDynPredictor() override;
+        void postDynOutput() override;
+        void postDynCorrectorIteration() override;
 		MarkerFrame();
         MarkerFrame(const std::string& str);
 		System* root() override;

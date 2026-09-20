@@ -101,3 +101,31 @@ void ConstVelConstraintIJ::simUpdateAll()
 	aA10IeJe->simUpdateAll();
 	ConstraintIJ::simUpdateAll();
 }
+
+void ConstVelConstraintIJ::postDynPredictor()
+{
+    aA01IeJe->postDynPredictor();
+    aA10IeJe->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void ConstVelConstraintIJ::postDynCorrectorIteration()
+{
+    aA01IeJe->postDynCorrectorIteration();
+    aA10IeJe->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void ConstVelConstraintIJ::preDynOutput()
+{
+    aA01IeJe->preDynOutput();
+    aA10IeJe->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void ConstVelConstraintIJ::postDynOutput()
+{
+    aA01IeJe->postDynOutput();
+    aA10IeJe->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

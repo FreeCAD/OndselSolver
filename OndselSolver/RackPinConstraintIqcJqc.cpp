@@ -146,3 +146,24 @@ std::string MbD::RackPinConstraintIqcJqc::constraintSpec()
 {
 	return "RackPinConstraintIJ";
 }
+
+void RackPinConstraintIqcJqc::fillpFpy(SpMatDsptr mat)
+{
+    RackPinConstraintIqcJc::fillpFpy(mat);
+    mat->atijplusFullRow(iG, iqXJ, pGpXJ);
+    mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+    auto ppGpEIpXJlam = ppGpEIpXJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqXJ, ppGpEIpXJlam);
+    mat->atijplusTransposeFullMatrix(iqXJ, iqEI, ppGpEIpXJlam);
+    auto ppGpEIpEJlam = ppGpEIpEJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqEJ, ppGpEIpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqEI, ppGpEIpEJlam);
+    mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+}
+
+void RackPinConstraintIqcJqc::fillpFpydot(SpMatDsptr mat)
+{
+    RackPinConstraintIqcJc::fillpFpydot(mat);
+    mat->atijplusFullColumn(iqXJ, iG, pGpXJ->transpose());
+    mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+}

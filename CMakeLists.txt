@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(OndselSolver VERSION 1.0.1 DESCRIPTION "Assembly Constraints and Multibody Dynamics code")
+project(OndselSolver VERSION 2.0.0 DESCRIPTION "Assembly Constraints and Multibody Dynamics code")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)

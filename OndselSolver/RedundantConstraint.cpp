@@ -117,3 +117,63 @@ std::string MbD::RedundantConstraint::constraintSpec()
 {
 	return "RedundantConstraint" + constraint->constraintSpec();
 }
+
+void RedundantConstraint::fillpqsumu(FColDsptr col)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::fillpqsumudot(FColDsptr col)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::setpqsumu(FColDsptr col)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::setpqsumudot(FColDsptr col)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::setpqsumuddot(FColDsptr col)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::postDynPredictor()
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::fillDynError(FColDsptr col)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::fillpFpy(SpMatDsptr mat)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::fillpFpydot(SpMatDsptr mat)
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::postDynCorrectorIteration()
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::preDynOutput()
+{
+    //Do nothing.
+}
+
+void RedundantConstraint::postDynOutput()
+{
+    //Do nothing.
+}

@@ -45,6 +45,13 @@ void MbD::PosICDragNewtonRaphson::initializeGlobally()
 	matrixSolver = this->matrixSolverClassNew();
 	iterMax = system->iterMaxPosKine;
 	dxTol = system->errorTolPosKine;
+	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) {
+		item->fillqsu(qsuOld);
+		item->fillqsuWeights(qsuWeights);
+		item->fillqsulam(x);
+		});
+	// Apply cursor priorities after the mass-based weights, which otherwise
+	// overwrite them and move the dragged component away from the cursor.
 	for (size_t i = 0; i < qsuWeights->size(); i++)
 	{
 		qsuWeights->at(i) = 1.0e3;	//minimum weight
@@ -56,11 +63,6 @@ void MbD::PosICDragNewtonRaphson::initializeGlobally()
 			qsuWeights->at((size_t)iqX + i) = 1.0e6;	//maximum weight
 		}
 	}
-	system->partsJointsMotionsLimitsDo([&](std::shared_ptr<Item> item) {
-		item->fillqsu(qsuOld);
-		item->fillqsuWeights(qsuWeights);
-		item->fillqsulam(x);
-		});
 }
 
 void MbD::PosICDragNewtonRaphson::fillY()

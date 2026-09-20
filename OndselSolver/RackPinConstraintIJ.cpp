@@ -110,3 +110,31 @@ void MbD::RackPinConstraintIJ::simUpdateAll()
 	thezIeJe->simUpdateAll();
 	ConstraintIJ::simUpdateAll();
 }
+
+void RackPinConstraintIJ::postDynPredictor()
+{
+    xIeJeIe->postDynPredictor();
+    thezIeJe->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void RackPinConstraintIJ::postDynCorrectorIteration()
+{
+    xIeJeIe->postDynCorrectorIteration();
+    thezIeJe->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void RackPinConstraintIJ::preDynOutput()
+{
+    xIeJeIe->preDynOutput();
+    thezIeJe->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void RackPinConstraintIJ::postDynOutput()
+{
+    xIeJeIe->postDynOutput();
+    thezIeJe->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

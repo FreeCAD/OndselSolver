@@ -77,3 +77,27 @@ void AtPointConstraintIJ::preAccIC()
 	riIeJeO->preAccIC();
 	Constraint::preAccIC();
 }
+
+void AtPointConstraintIJ::postDynPredictor()
+{
+    riIeJeO->postDynPredictor();
+    ConstraintIJ::postDynPredictor();
+}
+
+void AtPointConstraintIJ::postDynCorrectorIteration()
+{
+    riIeJeO->postDynCorrectorIteration();
+    ConstraintIJ::postDynCorrectorIteration();
+}
+
+void AtPointConstraintIJ::preDynOutput()
+{
+    riIeJeO->preDynOutput();
+    ConstraintIJ::preDynOutput();
+}
+
+void AtPointConstraintIJ::postDynOutput()
+{
+    riIeJeO->postDynOutput();
+    ConstraintIJ::postDynOutput();
+}

@@ -18,17 +18,22 @@ namespace MbD {
     {
         //system direction 
     public:
+        static std::shared_ptr<Integrator> With();
+
         void setSystem(Solver* sys) override;
-        virtual void firstStep() = 0;
-        virtual void preFirstStep() = 0;
-        virtual void postFirstStep() = 0;
-        virtual void subsequentSteps() = 0;
-        virtual void nextStep() = 0;
-        virtual void preStep() = 0;
-        virtual void postStep() = 0;
-        virtual void runInitialConditionTypeSolution() = 0;
-        virtual void iStep(size_t i) = 0;
-        virtual void selectOrder() = 0;
+        void run() override;
+        virtual void firstStep();
+        virtual void preFirstStep();
+        virtual void postFirstStep();
+        virtual void subsequentSteps();
+        virtual void nextStep();
+        virtual void preStep();
+        virtual void postStep();
+        virtual void runInitialConditionTypeSolution();
+        virtual void iStep(size_t i);
+        virtual void selectOrder();
+        virtual void selectStepSize();
+        virtual size_t iterMax();
 
         double direction = 1;
     };

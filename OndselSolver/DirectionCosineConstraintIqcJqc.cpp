@@ -86,3 +86,19 @@ void DirectionCosineConstraintIqcJqc::fillAccICIterError(FColDsptr col)
 	sum += qEdotJ->transposeTimesFullColumn(ppGpEJpEJ->timesFullColumn(qEdotJ));
 	col->atiplusNumber(iG, sum);
 }
+
+void DirectionCosineConstraintIqcJqc::fillpFpy(SpMatDsptr mat)
+{
+    DirectionCosineConstraintIqcJc::fillpFpy(mat);
+    mat->atijplusFullRow(iG, iqEJ, pGpEJ);
+    auto ppGpEIpEJlam = ppGpEIpEJ->times(lam);
+    mat->atijplusFullMatrix(iqEI, iqEJ, ppGpEIpEJlam);
+    mat->atijplusTransposeFullMatrix(iqEJ, iqEI, ppGpEIpEJlam);
+    mat->atijplusFullMatrixtimes(iqEJ, iqEJ, ppGpEJpEJ, lam);
+}
+
+void DirectionCosineConstraintIqcJqc::fillpFpydot(SpMatDsptr mat)
+{
+    DirectionCosineConstraintIqcJc::fillpFpydot(mat);
+    mat->atijplusFullColumn(iqEJ, iG, pGpEJ->transpose());
+}

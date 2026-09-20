@@ -19,12 +19,26 @@ namespace MbD {
 	{
 		//iG aG lam mu lamDeriv owner 
 	public:
+        void setpqsumu(FColDsptr col) override;
+        void setpqsumudot(FColDsptr col) override;
+        void setpqsumuddot(FColDsptr col) override;
+        void fillDynError(FColDsptr col) override;
+        void fillpqsumu(FColDsptr col) override;
+        void fillpqsumudot(FColDsptr col) override;
 		Constraint();
 		Constraint(const std::string& str);
 
 		void initialize() override;
 		virtual void addToJointForceI(FColDsptr col);
 		virtual void addToJointTorqueI(FColDsptr col);
+		virtual double constraintVelocity() const;
+		virtual void fillGeneralizedForce(FColDsptr col, double multiplier);
+		virtual void fillGeneralizedForcePositionJacobian(
+			SpMatDsptr mat,
+			double multiplier,
+			double derivative
+		);
+		virtual void fillGeneralizedForceVelocityJacobian(SpMatDsptr mat, double derivative);
 		void fillAccICIterJacob(SpMatDsptr mat) override;
         void fillConstraints(std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> allConstraints) override;
 		virtual void fillConstraints(std::shared_ptr<Constraint> sptr, std::shared_ptr<std::vector<std::shared_ptr<Constraint>>> allConstraints);

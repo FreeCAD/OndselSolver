@@ -146,3 +146,19 @@ void MbD::ScrewConstraintIqcJc::useEquationNumbers()
 	iqXI = frmIeqc->iqX();
 	iqEI = frmIeqc->iqE();
 }
+
+void ScrewConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusFullRow(iG, iqXI, pGpXI);
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    auto ppGpXIpEIlam = ppGpXIpEI->times(lam);
+    mat->atijplusFullMatrix(iqXI, iqEI, ppGpXIpEIlam);
+    mat->atijplusTransposeFullMatrix(iqEI, iqXI, ppGpXIpEIlam);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void ScrewConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqXI, iG, pGpXI->transpose());
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}

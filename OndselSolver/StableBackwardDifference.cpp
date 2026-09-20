@@ -81,7 +81,7 @@ FColDsptr MbD::StableBackwardDifference::derivativepresentpast(size_t deriv, FCo
 	//"Answer ith derivative given present value and past values."
 
 	if (deriv == 0) {
-		return std::static_pointer_cast<FullColumn<double>>(y->clonesptr());
+		return y->copy();
 	}
 	else {
 		if (deriv <= order) {
@@ -99,4 +99,23 @@ FColDsptr MbD::StableBackwardDifference::derivativepresentpast(size_t deriv, FCo
 			return std::make_shared<FullColumn<double>>(ySize, 0.0);
 		}
 	}
+}
+
+FColDsptr StableBackwardDifference::derivativeatpresentpastpresentDerivativepastDerivative(size_t n, double t, FColDsptr y, std::shared_ptr<std::vector<FColDsptr>> ypast, FColDsptr ydot, std::shared_ptr<std::vector<FColDsptr>> ydotpast)
+{
+    //"Interpolate or extrapolate."
+    //"dfdt(t) = df0dt + d2f0dt2*(t - t0) + d3f0dt3*(t - t0)^2 / 2! + ..."
+
+    auto answer = derivativepresentpastpresentDerivativepastDerivative(n, y, ypast, ydot, ydotpast);
+    if (t != time) {
+        auto dt = t - time;
+        auto dtpower = 1.0;
+        for (size_t i = n + 1; i <= order; i++)
+        {
+            auto diydti = derivativepresentpastpresentDerivativepastDerivative(i, y, ypast, ydot, ydotpast);
+            dtpower = dtpower * dt;
+            answer->equalSelfPlusFullColumntimes(diydti, dtpower * OneOverFactorials->at(i - n));
+        }
+    }
+    return answer;
 }

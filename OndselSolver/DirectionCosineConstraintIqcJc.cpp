@@ -77,3 +77,14 @@ void DirectionCosineConstraintIqcJc::addToJointTorqueI(FColDsptr jointTorque)
 	auto c2Torque = aBOIp->timesFullColumn(lampGpE);
 	jointTorque->equalSelfPlusFullColumntimes(c2Torque, 0.5);
 }
+
+void DirectionCosineConstraintIqcJc::fillpFpy(SpMatDsptr mat)
+{
+    mat->atijplusFullRow(iG, iqEI, pGpEI);
+    mat->atijplusFullMatrixtimes(iqEI, iqEI, ppGpEIpEI, lam);
+}
+
+void DirectionCosineConstraintIqcJc::fillpFpydot(SpMatDsptr mat)
+{
+    mat->atijplusFullColumn(iqEI, iG, pGpEI->transpose());
+}

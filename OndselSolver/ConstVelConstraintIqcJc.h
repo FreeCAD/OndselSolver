@@ -17,6 +17,8 @@ namespace MbD {
     {
         //pGpEI ppGpEIpEI iqEI 
     public:
+        void fillpFpy(SpMatDsptr mat) override;
+        void fillpFpydot(SpMatDsptr mat) override;
         ConstVelConstraintIqcJc(EndFrmsptr frmi, EndFrmsptr frmj);
         
         void calcPostDynCorrectorIteration() override;

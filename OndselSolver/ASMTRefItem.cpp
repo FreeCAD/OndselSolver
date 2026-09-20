@@ -8,7 +8,6 @@
  
 #include "ASMTRefItem.h"
 #include "CREATE.h"
-#include <algorithm>
 
 using namespace MbD;
 
@@ -23,14 +22,9 @@ void MbD::ASMTRefItem::readMarkers(std::vector<std::string>& lines)
 	assert(lines[0].find("Markers") != std::string::npos);
 	lines.erase(lines.begin());
 	markers->clear();
-	auto it = std::find_if(lines.begin(), lines.end(), [](const std::string& s) {
-		return s.find("RefPoint") != std::string::npos;
-		});
-	std::vector<std::string> markersLines(lines.begin(), it);
-	while (!markersLines.empty()) {
-		readMarker(markersLines);
+	while (!lines.empty() && readString(lines.front()) == "Marker") {
+		readMarker(lines);
 	}
-	lines.erase(lines.begin(), it);
 }
 
 void MbD::ASMTRefItem::readMarker(std::vector<std::string>& lines)
